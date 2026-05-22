@@ -21,11 +21,12 @@ export const APP_CONFIG = {
   ],
 
   socials: {
-    twitter: "https://twitter.com/",
+    twitter: "https://twitter.com/Stack_Audit",
     github:
       "https://github.com/Rudra070311/Stack-Audit",
+    instagram: "https://www.instagram.com/stack.audit/",
   },
 
   supportEmail:
-    "support@stackaudit.dev",
+    "rudra070311@gmail.com",
 };

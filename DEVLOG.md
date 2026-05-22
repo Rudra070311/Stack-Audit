@@ -23,3 +23,11 @@
 **What I learned:** Strong architecture early dramatically improves implementation speed later in the project. ANd that is the reason for working on components first rather than page.tsx or smth.
 **Blockers / what I'm stuck on:** Nothing yet thankfully
 **Plan for tomorrow:** I plan to complete the full audit form and linking it, as well as completing the full css there.
+
+### Day 3 — 2026-05-22
+
+**Hours worked:** 1.5 hrs
+**What I did:** Continued work on the frontend audit experience and completed the conversational onboarding architecture for the AI spend audit flow. Built modular chat-based onboarding components including assistant messages, user messages, quick replies, typing indicators, chat shell, and structured conversation state handling. I also finalized the initial pricing/constants structure and improved the overall product direction by shifting from static forms toward a guided conversational audit experience. I used AI tools like copilot in my IDLE and ChatGPT in browser to speed up tasks like repetitive frontend implementation so i can focus on architecture and engineering. I also realized that i cannot use Claude because of age restrictions for summary generation, so i plan to use deepseek v3/v4 by openrouter and github pages.
+**What I learned:** Guided onboarding flows can significantly improve user experience and reduce friction compared to traditional long forms. I also learned that properly separating deterministic audit logic from AI-generated summaries creates a much cleaner and more reliable architecture.
+**Blockers / what I'm stuck on:** No major blockers yet.
+**Plan for tomorrow:** i plan to complete the full audit engine flow, AI-generated summaries, landing page, audit results rendering, and possibly public shareable result URLs if time permits.
