@@ -28,27 +28,24 @@ export async function generateSummary({
     annualSavings,
     recommendation,
   });
-  
-  try {
-    return await generateWithGithubModels(
-      prompt
-    );
-  } catch (error) {
-    console.error(
-      "GitHub Models failed:",
-      error
-    );
+  if (process.env.OPENROUTER_API_KEY) {
+    try {
+      return await generateWithOpenRouter(prompt);
+    } catch (error) {
+      console.error("OpenRouter failed:", error);
+    }
+  } else {
+    console.warn("OPENROUTER_API_KEY not set, skipping OpenRouter provider");
   }
 
-  try {
-    return await generateWithOpenRouter(
-      prompt
-    );
-  } catch (error) {
-    console.error(
-      "OpenRouter failed:",
-      error
-    );
+  if (process.env.GITHUB_MODELS_TOKEN) {
+    try {
+      return await generateWithGithubModels(prompt);
+    } catch (error) {
+      console.error("GitHub Models failed:", error);
+    }
+  } else {
+    console.warn("GITHUB_MODELS_TOKEN not set, skipping GitHub models provider");
   }
   return generateFallbackSummary({
     tool,

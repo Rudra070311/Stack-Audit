@@ -1,23 +1,38 @@
 "use client";
 
 export default function Error({
-	error,
-	reset,
+    error,
 }: {
-	error: Error & { digest?: string };
-	reset: () => void;
+    error: Error;
 }) {
 	return (
-		<div className="flex min-h-screen flex-col items-center justify-center gap-4 p-8 text-center">
-			<h2 className="text-xl font-semibold">Could not load results.</h2>
-			<p className="max-w-md text-sm text-gray-600">{error.message}</p>
-			<button
-				type="button"
-				onClick={reset}
-				className="rounded-md bg-black px-4 py-2 text-sm text-white"
+		<main
+		className="
+			flex min-h-screen
+			items-center justify-center
+			bg-black px-6 text-white
+		"
+		>
+			<div
+				className="
+				max-w-md rounded-3xl
+				border border-red-900/50
+				bg-red-950/20 p-8
+				"
 			>
-				Retry
-			</button>
-		</div>
+				<h1
+				className="
+					text-2xl font-bold
+					text-red-400
+				"
+				>
+					Failed to load audit
+				</h1>
+
+				<p className="mt-4 text-zinc-300">
+					{error.message}
+				</p>
+			</div>
+		</main>
 	);
 }

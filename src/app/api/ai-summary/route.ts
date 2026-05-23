@@ -5,8 +5,19 @@ export async function POST(
     request: NextRequest
 ) {
 	try {
-		const body =
-		await request.json();
+		let body;
+		try {
+			body = await request.json();
+		} catch (parseErr) {
+			try {
+				const text = await request.clone().text();
+				console.error("AI Summary API: failed to parse JSON body. Raw body:", text);
+			} catch (e) {
+				console.error("AI Summary API: failed to read raw body to log parse error.", e);
+			}
+
+			throw parseErr;
+		}
 
 		const {
 			tool,

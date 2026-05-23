@@ -1,14 +1,18 @@
-const OPENROUTER_URL =
-  "https://openrouter.ai/api/v1/chat/completions";
-
+const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const GITHUB_MODELS_URL =
   "https://models.inference.ai.azure.com/chat/completions";
+
+const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL ||
+  "deepseek/deepseek-chat-v3-0324:free";
+
+const GITHUB_MODEL = process.env.GITHUB_MODEL ||
+  "deepseek-ai/DeepSeek-V3";
 
 const SYSTEM_PROMPT = `
 You generate concise SaaS-style AI spend audit summaries.
 
 Rules:
-- Maximum 100 words
+- Maximum 80 words
 - One paragraph only
 - No markdown
 - No hype
@@ -39,12 +43,11 @@ export async function generateWithOpenRouter(
       },
 
       body: JSON.stringify({
-        model:
-          "deepseek/deepseek-chat-v3-0324:free",
+        model: OPENROUTER_MODEL,
 
-        temperature: 0.4,
+        temperature: 0.2,
 
-        max_tokens: 140,
+        max_completion_tokens: 256,
 
         messages: [
           {
@@ -72,8 +75,23 @@ export async function generateWithOpenRouter(
 
   const data = await response.json();
 
-  return data.choices?.[0]?.message
-    ?.content;
+  const content =
+    data?.choices?.[0]?.message?.content ||
+    data?.choices?.[0]?.text ||
+    data?.output?.[0]?.content?.text ||
+    data?.output?.[0]?.content ||
+    data?.result?.[0]?.content ||
+    null;
+
+  if (!content) {
+    throw new Error(
+      `OpenRouter response missing content: ${JSON.stringify(
+        data
+      )}`
+    );
+  }
+
+  return content;
 }
 
 export async function generateWithGithubModels(
@@ -92,12 +110,11 @@ export async function generateWithGithubModels(
       },
 
       body: JSON.stringify({
-        model:
-          "deepseek-ai/DeepSeek-V3",
+        model: GITHUB_MODEL,
 
-        temperature: 0.4,
+        temperature: 0.2,
 
-        max_tokens: 140,
+        max_completion_tokens: 256,
 
         messages: [
           {
@@ -125,6 +142,21 @@ export async function generateWithGithubModels(
 
   const data = await response.json();
 
-  return data.choices?.[0]?.message
-    ?.content;
+  const content =
+    data?.choices?.[0]?.message?.content ||
+    data?.choices?.[0]?.text ||
+    data?.output?.[0]?.content?.text ||
+    data?.output?.[0]?.content ||
+    data?.result?.[0]?.content ||
+    null;
+
+  if (!content) {
+    throw new Error(
+      `GitHub Models response missing content: ${JSON.stringify(
+        data
+      )}`
+    );
+  }
+
+  return content;
 }

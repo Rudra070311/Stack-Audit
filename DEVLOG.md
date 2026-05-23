@@ -27,7 +27,16 @@
 ### Day 3 — 2026-05-22
 
 **Hours worked:** 1.5 hrs
-**What I did:** Continued work on the frontend audit experience and completed the conversational onboarding architecture for the AI spend audit flow. Built modular chat-based onboarding components including assistant messages, user messages, quick replies, typing indicators, chat shell, and structured conversation state handling. I also finalized the initial pricing/constants structure and improved the overall product direction by shifting from static forms toward a guided conversational audit experience. I used AI tools like copilot in my IDLE and ChatGPT in browser to speed up tasks like repetitive frontend implementation so i can focus on architecture and engineering. I also realized that i cannot use Claude because of age restrictions for summary generation, so i plan to use deepseek v3/v4 by openrouter and github pages.
+**What I did:** Continued work on the frontend audit experience and completed the conversational onboarding architecture for the AI spend audit flow. Built modular chat-based onboarding components including assistant messages, user messages, quick replies, typing indicators, chat shell, and structured conversation state handling. I also finalized the initial pricing/constants structure and improved the overall product direction by shifting from static forms toward a guided conversational audit experience. I used AI tools like copilot in my IDLE and ChatGPT in browser to speed up tasks like repetitive frontend implementation so I can focus on architecture and engineering. I also realized that I cannot use Claude because of age restrictions for summary generation, so I plan to use deepseek v3/v4 by openrouter and github pages.
 **What I learned:** Guided onboarding flows can significantly improve user experience and reduce friction compared to traditional long forms. I also learned that properly separating deterministic audit logic from AI-generated summaries creates a much cleaner and more reliable architecture.
 **Blockers / what I'm stuck on:** No major blockers yet.
-**Plan for tomorrow:** i plan to complete the full audit engine flow, AI-generated summaries, landing page, audit results rendering, and possibly public shareable result URLs if time permits.
+**Plan for tomorrow:** I plan to complete the full audit engine flow, AI-generated summaries, landing page, audit results rendering, and possibly public shareable result URLs if time permits.
+
+### Day 4 — 2026-05-23
+
+**Hours worked:** 2.5hrs
+**What I did:** I continued building the architecture and right now, I am not rushing the CSS. THat I plan to leave on copilot. I made the logo for the app that I will commit tommorrow. Finished major parts of the audit engine + AI summary pipeline with provider fallback handling. I also tested the live audit generation flow end-to-end locally- but its still not up to the requiired level
+Update- Copilot just pixed the API. AI responses getting now.
+**What I learned:** Reliability matters more than flashy AI usage. The fallback chain (GitHub Models → OpenRouter → deterministic fallback summary) made the app feel much more production-grade. I also realized that the whole point is to make the app very trendy and usable, so I am putting a day just for CSS to get that production level feel.
+**Blockers / what I'm stuck on:** I feel a bit stuck on the audit generation. My apI is not able to call the model accurately. deepseek returned the reasoning part, so I am getting some issues. also time seems to be running now
+**Plan for tomorrow:** I plan to complete the sharable link, backend and landing page tommorrow or till Monday. We will see as last  day, I want to do for marketing, and completing other necessary files.
