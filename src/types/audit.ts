@@ -1,17 +1,34 @@
-export type ToolName = "Cursor" | "Copilot" | "Claude" | "ChatGPT" | "Anthropic" | "OpenAI" | "Gemini" | "WindSurf";
+export type ToolName =
+  | "Cursor"
+  | "Claude"
+  | "ChatGPT"
+  | "OpenAI"
+  | "Copilot"
+  | "Gemini"
+  | "Windsurf";
 
-export type UseCase = "coding" | "writing" | "data" | "research" | "mixed";
+export type UseCase =
+  | "coding"
+  | "writing"
+  | "data"
+  | "research"
+  | "mixed";
 
-export interface ToolEntry {
-  id: string;
+export interface AuditFormData {
   tool: ToolName;
-  plan: string;
   monthlySpend: number;
-  seats: number;
+  teamSize: number;
+  useCase: UseCase;
 }
 
-export interface AuditFormValues {
-  tools: ToolEntry[];
+export interface AuditResult {
+  tool: string;
+  currentSpend: number;
+  optimizedSpend: number;
+  monthlySavings: number;
+  annualSavings: number;
+  recommendation: string;
+  reasoning: string;
+  useCase: string;
   teamSize: number;
-  primaryUseCase: UseCase;
 }

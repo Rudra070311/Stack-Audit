@@ -1,0 +1,3 @@
+export const HIGH_SAVINGS_THRESHOLD = 500;
+export const LOW_SAVINGS_THRESHOLD = 100;
+export const BENCHMARK_SPEND_PER_DEV = 120;
