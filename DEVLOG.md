@@ -36,7 +36,15 @@
 
 **Hours worked:** 2.5hrs
 **What I did:** I continued building the architecture and right now, I am not rushing the CSS. THat I plan to leave on copilot. I made the logo for the app that I will commit tommorrow. Finished major parts of the audit engine + AI summary pipeline with provider fallback handling. I also tested the live audit generation flow end-to-end locally- but its still not up to the requiired level
-Update- Copilot just pixed the API. AI responses getting now.
+Update- Copilot just fixed the API. AI responses getting now.
 **What I learned:** Reliability matters more than flashy AI usage. The fallback chain (GitHub Models → OpenRouter → deterministic fallback summary) made the app feel much more production-grade. I also realized that the whole point is to make the app very trendy and usable, so I am putting a day just for CSS to get that production level feel.
 **Blockers / what I'm stuck on:** I feel a bit stuck on the audit generation. My apI is not able to call the model accurately. deepseek returned the reasoning part, so I am getting some issues. also time seems to be running now
 **Plan for tomorrow:** I plan to complete the sharable link, backend and landing page tommorrow or till Monday. We will see as last  day, I want to do for marketing, and completing other necessary files.
+
+### Day 5 — 2026-05-24
+
+**Hours worked:** 2hrs
+**What I did:** Today I did the components and library parts. I am completing the backend files, so we can do everything and get the final build tomorrow. AI gen pipeline seems to be truly working now and I just need to make it usable now.
+**What I learned:** I learned how these fallback summaries can be so good. In our app only, if openrouter wasn't there, right now I wouldnt have anything working, and user won't be able to get anything.
+**Blockers / what I'm stuck on:** GitHub ai model is working right now.
+**Plan for tomorrow:** I plan to complete the app tomorrow. UI by copilot, deploy it, get help from AI to debug this GitHub model failing. I plan to get stack-audit.vercel.app if possible. logo is complete. We need really good UI. Also I plan to get conversations on it from my parents, sister, and a tech enthusiast friend. Will be good as all have different traits.

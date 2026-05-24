@@ -4,6 +4,7 @@ export type ToolName =
   | "ChatGPT"
   | "OpenAI"
   | "Copilot"
+  | "Anthropic"
   | "Gemini"
   | "Windsurf";
 

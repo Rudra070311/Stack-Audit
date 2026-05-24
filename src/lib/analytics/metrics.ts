@@ -1,0 +1,4 @@
+export const METRICS = {
+    HIGH_SAVINGS_THRESHOLD: 500,
+    LOW_SAVINGS_THRESHOLD: 100,
+};

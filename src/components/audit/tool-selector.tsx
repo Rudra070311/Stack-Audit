@@ -15,7 +15,7 @@ const tools: ToolName[] = [
   "Anthropic",
   "OpenAI",
   "Gemini",
-  "WindSurf",
+  "Windsurf",
 ];
 
 export function ToolSelector({

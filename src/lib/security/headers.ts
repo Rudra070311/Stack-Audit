@@ -1,0 +1,5 @@
+export const SECURITY_HEADERS =
+    {
+        "X-Frame-Options":"DENY",
+        "X-Content-Type-Options":"nosniff",
+    };
