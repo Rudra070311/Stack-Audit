@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 
-export function GET() {
-	return NextResponse.json({ ok: true });
+export async function GET() {
+	return NextResponse.json({
+		success: true,
+		status: "ok",
+		uptime: process.uptime(),
+		timestamp: new Date().toISOString(),
+	});
 }
