@@ -1,0 +1,125 @@
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-300 bg-clip-text text-transparent;
+  }
+
+  .glow-card {
+    @apply border border-zinc-800/40 bg-zinc-900/30 backdrop-blur-sm hover:border-cyan-500/50 hover:bg-zinc-900/50 transition-all duration-300;
+  }
+
+  .nav-link {
+    @apply text-sm text-zinc-400 hover:text-zinc-50 transition-colors;
+  }
+
+  .nav-link-active {
+    @apply absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 transition-all duration-300;
+  }
+
+  .hero-section {
+    @apply relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8 pt-16 pb-20;
+  }
+
+  .hero-badge {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm;
+  }
+
+  .hero-headline {
+    @apply text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 tracking-tight;
+  }
+
+  .hero-subheadline {
+    @apply text-lg sm:text-xl text-zinc-400 mb-12 max-w-2xl mx-auto leading-relaxed;
+  }
+
+  .feature-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+
+  .feature-card {
+    @apply rounded-xl border border-zinc-800 bg-zinc-900/40 p-6 space-y-4 hover:border-cyan-500/30 hover:bg-zinc-900/60 transition-all duration-300;
+  }
+
+  .feature-icon {
+    @apply w-8 h-8;
+  }
+
+  .feature-title {
+    @apply text-lg font-semibold text-white;
+  }
+
+  .feature-description {
+    @apply text-zinc-400 leading-relaxed;
+  }
+
+  .floating-card {
+    @apply animate-float p-4 rounded-xl border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm;
+  }
+
+  .floating-card-value {
+    @apply text-2xl font-bold text-zinc-50;
+  }
+
+  .floating-card-label {
+    @apply text-sm text-zinc-500;
+  }
+
+  .section-title {
+    @apply text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-50 mb-4;
+  }
+
+  .section-subtitle {
+    @apply text-lg text-zinc-400 font-medium;
+  }
+
+  .pricing-card {
+    @apply rounded-xl border border-zinc-800 bg-zinc-900/50 p-8 space-y-4 backdrop-blur-sm hover:border-cyan-500/50 transition-all;
+  }
+
+  .pricing-value {
+    @apply text-3xl font-bold text-white;
+  }
+
+  .pricing-period {
+    @apply text-sm text-zinc-400;
+  }
+
+  .faq-item {
+    @apply rounded-lg border border-zinc-800 bg-zinc-900/30 p-6 space-y-3;
+  }
+
+  .faq-question {
+    @apply font-semibold text-white cursor-pointer;
+  }
+
+  .faq-answer {
+    @apply text-zinc-400 leading-relaxed;
+  }
+
+  .tool-icon {
+    @apply text-2xl;
+  }
+
+  .tool-name {
+    @apply font-semibold text-zinc-200;
+  }
+
+  .savings-highlight {
+    @apply bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 rounded-lg p-4 text-emerald-300;
+  }
+
+  .testimonial-card {
+    @apply rounded-lg border border-zinc-800 bg-zinc-900/40 p-6 space-y-3;
+  }
+
+  .testimonial-text {
+    @apply text-zinc-300 italic;
+  }
+
+  .testimonial-author {
+    @apply font-semibold text-white;
+  }
+
+  .testimonial-role {
+    @apply text-sm text-zinc-400;
+  }
+}

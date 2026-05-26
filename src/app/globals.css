@@ -1,0 +1,283 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom animations */
+@keyframes glow-pulse {
+  0%, 100% {
+    transform: scale(0.95);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.3;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 4s ease-in-out infinite alternate;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  @apply bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent;
+}
+
+/* Subtle grid pattern for hero background */
+.bg-grid-pattern {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Smooth scrolling for the whole page (if not already in your reset) */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom focus ring for better accessibility */
+*:focus-visible {
+  @apply outline-none ring-2 ring-cyan-400 ring-offset-2 ring-offset-zinc-950;
+}
+
+/* Optional: improve button active state uniformity */
+button:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+/* ===== FOUNDATIONS ===== */
+:root {
+  --neon-cyan: #22d3ee;
+  --neon-blue: #3b82f6;
+  --neon-purple: #a855f7;
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-bg: rgba(9, 9, 11, 0.7);
+  --glass-bg-hover: rgba(9, 9, 11, 0.9);
+  --card-radius: 1.25rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== CUSTOM ANIMATIONS ===== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-15px) rotate(0.5deg); }
+  66% { transform: translateY(-7px) rotate(-0.3deg); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.15; transform: scale(0.9); }
+  50% { opacity: 0.4; transform: scale(1.1); }
+}
+
+@keyframes border-beam {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes ripple {
+  to { transform: scale(4); opacity: 0; }
+}
+
+@keyframes text-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ===== HERO BACKGROUND LAYERS ===== */
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 40%, transparent 70%);
+}
+
+/* Moving gradient orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.2;
+  animation: orb-drift 20s infinite alternate ease-in-out;
+}
+
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--neon-cyan), transparent 70%);
+  top: -20%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, var(--neon-blue), transparent 70%);
+  top: 60%;
+  right: -15%;
+  animation-delay: -5s;
+}
+
+.orb-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, var(--neon-purple), transparent 70%);
+  bottom: -10%;
+  left: 30%;
+  animation-delay: -10s;
+}
+
+@keyframes orb-drift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, -30px) scale(1.1); }
+}
+
+/* ===== GLASS MORPHISM ENHANCEMENT ===== */
+.glass-card {
+  background: rgba(12, 12, 15, 0.65);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.glass-card:hover {
+  background: rgba(18, 18, 24, 0.8);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(34, 211, 238, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: translateY(-4px);
+}
+
+/* ===== BUTTON RIPPLE EFFECT ===== */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 10%, transparent 10%);
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.6s, transform 0.6s;
+}
+
+.btn-ripple:active::after {
+  opacity: 1;
+  transform: scale(20);
+  transition: 0s;
+}
+
+/* ===== GRADIENT BORDER ANIMATION ===== */
+.animated-border {
+  position: relative;
+  border-radius: var(--card-radius);
+  background: linear-gradient(60deg, var(--neon-blue), var(--neon-cyan), var(--neon-purple), var(--neon-blue));
+  background-size: 300% 300%;
+  animation: border-beam 6s ease infinite;
+  padding: 2px;
+}
+
+.animated-border > * {
+  background: #09090b;
+  border-radius: calc(var(--card-radius) - 2px);
+  height: 100%;
+  width: 100%;
+}
+
+/* ===== TEXT GRADIENT SHIMMER ===== */
+.shimmer-text {
+  background: linear-gradient(90deg, #fff 0%, #a5f3fc 25%, #38bdf8 50%, #a5f3fc 75%, #fff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 3s linear infinite;
+}
+
+/* ===== FLOATING CARD 3D TILT ===== */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.tilt-card:hover {
+  transform: perspective(800px) rotateX(2deg) rotateY(-2deg) scale(1.02);
+}
+
+/* ===== NEON GLOW UTILITY ===== */
+.neon-glow {
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.3), 0 0 45px rgba(59, 130, 246, 0.15);
+}
+
+.neon-glow-hover:hover {
+  box-shadow: 0 0 25px rgba(34, 211, 238, 0.6), 0 0 65px rgba(59, 130, 246, 0.3);
+}
+
+/* ===== STATS NUMBER COUNTER (pure CSS illusion) ===== */
+.stat-number {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+/* ===== DOTTED PATTERN OVERLAY (for sections) ===== */
+.dotted-pattern {
+  background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* ===== SCROLL REVEAL (optional, use with Intersection Observer JS) ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== ACCESSIBLE FOCUS RINGS (overrides Tailwind) ===== */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #09090b, 0 0 0 4px var(--neon-cyan);
+  border-radius: 4px;
+}
+
+/* ===== SMOOTH TRANSITION GLOBAL ===== */
+a, button, .card, .stat-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -20,8 +20,14 @@ interface AuditStore {
 export const useAuditStore =
     create<AuditStore>((set) => ({
         form: {
-            tool: "Cursor",
-            monthlySpend: 20,
+            tools: [
+                {
+                    name: "Cursor",
+                    plan: "Pro",
+                    monthlySpend: 20,
+                    seats: 1,
+                }
+            ],
             teamSize: 1,
             useCase: "coding",
         },

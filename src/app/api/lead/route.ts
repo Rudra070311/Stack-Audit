@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse} from "next/server";
 import { leadSchema } from "../../../lib/validations/lead-schema";
 import { sendAuditEmail } from "../../../lib/email/send-audit";
-import { createLead } from "@/src/lib/db/mutations";
+import { createLead } from "../../../lib/db/mutations";
 
 export async function POST(
   request: NextRequest

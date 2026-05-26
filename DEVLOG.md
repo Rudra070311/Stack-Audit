@@ -48,3 +48,11 @@ Update- Copilot just fixed the API. AI responses getting now.
 **What I learned:** I learned how these fallback summaries can be so good. In our app only, if openrouter wasn't there, right now I wouldnt have anything working, and user won't be able to get anything.
 **Blockers / what I'm stuck on:** GitHub ai model is working right now.
 **Plan for tomorrow:** I plan to complete the app tomorrow. UI by copilot, deploy it, get help from AI to debug this GitHub model failing. I plan to get stack-audit.vercel.app if possible. logo is complete. We need really good UI. Also I plan to get conversations on it from my parents, sister, and a tech enthusiast friend. Will be good as all have different traits.
+
+### Day 6 — 2026-05-25/26
+
+**Hours worked:** 2hrs
+**What I did:** I did polishing today majorly. Made the landing page, a few steps to make the whole app better and so it's done on time. I mean it's a good project but we still lack with css. And we need a far superior prompt. I have drafted the other necessary files.
+**What I learned:** I learned how I need to prompt my AI tools better for better results. Use of words like "you are helping in for the best app in the world", etc help in a better response. Also I learnt how using API is better in such apps and AI help is really important for a solo dev.
+**Blockers / what I'm stuck on:** I don't feel lost or anything but just under the pressure of time.
+**Plan for tomorrow:**  My school is half day tomorrow so I plan to get a bigger session into the final hous and submit the project tomorrow.

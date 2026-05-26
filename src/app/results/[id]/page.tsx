@@ -1,105 +1,118 @@
-interface ResultPageProps {
-	params: {
-		id: string;
-	};
+import { notFound } from "next/navigation";
+import { getPublicAudit } from "@/lib/supabase";
+import { AuditResults } from "@/components/results/audit-results";
+
+interface ResultsPageProps {
+  params: {
+    id: string;
+  };
 }
 
-export default function ResultPage({
-	params
-}: ResultPageProps) {
-	const mockAudit = {
-		id: params.id,
-		tool: "Claude",
-		currentSpend: 300,
-		optimizedSpend: 180,
-		monthlySavings: 120,
-		annualSavings: 1440,
-		recommendation: "Your current setup appears overprovisioned for your team size.",
-		reasoning: "Smaller teams can often reduce spend significantly through plan consolidation and lower-tier usage.",
-		summary: "Your current AI tooling stack appears slightly oversized relative to your reported usage patterns. Consolidating subscriptions and moving selective workloads to lower-cost plans could reduce ongoing spend while preserving workflow quality.",
-	}
+export async function generateMetadata({ params }: ResultsPageProps) {
+  try {
+    const audit = await getPublicAudit(params.id);
 
-	return(
-		<main className = "min-h-screen bg-black px-6 py-16 text-white">
-			<div className="mx-auto max-w-4xl">
-        <div className="rounded-3xl border border-zinc-800 bg-zinc-900/50 p-10">
-          <div className="mb-10">
-            <p className="text-sm uppercase tracking-wide text-zinc-500">
-              AI Spend Audit
-            </p>
-            <h1 className="mt-2 text-5xl font-bold">
-              Save $
-              {mockAudit.monthlySavings}
-              /mo
-            </h1>
-            <p className="mt-3 text-zinc-400">
-              Estimated annual savings of $
-              {mockAudit.annualSavings}
-            </p>
-          </div>
+    if (!audit) {
+      return {
+        title: "Audit Not Found - StackAudit",
+      };
+    }
 
-          <div className="space-y-8">
-            <div>
-              <p className="text-zinc-500">
-                Tool
-              </p>
-              <p className="mt-1 text-xl">
-                {mockAudit.tool}
-              </p>
+    const savings = audit.total_annual_savings;
+    const title = `Saved $${Math.round(savings)}/year with StackAudit`;
+    const description = `See how optimizing an AI tool stack saved $${Math.round(savings)} annually. Potential savings: $${Math.round(audit.total_monthly_savings)}/month.`;
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        type: "website",
+      },
+    };
+  } catch (error) {
+    return {
+      title: "StackAudit Results",
+    };
+  }
+}
+
+export default async function ResultsPage({ params }: ResultsPageProps) {
+  let audit;
+  try {
+    audit = await getPublicAudit(params.id);
+  } catch (error) {
+    console.error("Error fetching audit:", error);
+  }
+
+  if (!audit) {
+    notFound();
+  }
+
+  // Reconstruct AuditResult from stored data
+  const auditResult = {
+    auditId: params.id,
+    timestamp: audit.created_at,
+    tools: audit.tools_data as any,
+    teamSize: audit.team_size,
+    useCase: audit.use_case as any,
+    totalCurrentSpend: audit.total_current_spend,
+    totalOptimizedSpend: audit.total_optimized_spend,
+    totalMonthlySavings: audit.total_monthly_savings,
+    totalAnnualSavings: audit.total_annual_savings,
+    savingsPercentage: audit.savings_percentage,
+  };
+
+  return (
+    <>
+      <nav className="sticky top-0 z-40 border-b border-zinc-800/20 bg-zinc-950/60 backdrop-blur-2xl">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 via-cyan-400 to-blue-400" />
+              <span className="text-lg font-bold gradient-text">StackAudit</span>
             </div>
-
-            <div>
-              <p className="text-zinc-500">
-                Recommendation
-              </p>
-              <p className="mt-1 text-xl">
-                {mockAudit.recommendation}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-zinc-500">
-                Reasoning
-              </p>
-              <p className="mt-1 text-zinc-300">
-                {mockAudit.reasoning}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-zinc-500">
-                AI Summary
-              </p>
-              <p className="mt-1 text-zinc-300">
-                {mockAudit.summary}
-              </p>
-            </div>
-            <div
-              className=" rounded-2xl border border-zinc-800 bg-black/40 p-6">
-              <p className="text-zinc-500">
-                Current Spend
-              </p>
-              <p className="mt-2 text-3xl font-bold">
-                $
-                {mockAudit.currentSpend }
-              </p>
-              <div className="mt-6 h-3 overflow-hidden rounded-full bg-zinc-800">
-                <div className="h-full w-[60%] rounded-full bg-white"/>
-              </div>
-              <div className="mt-6 flex justify-between text-sm text-zinc-500">
-                <span>
-                  Optimized: $
-                  {mockAudit.optimizedSpend}
-                </span>
-                <span>
-                  Savings: $
-                  {mockAudit.monthlySavings}
-                </span>
-              </div>
+            <div className="hidden gap-8 sm:flex">
+              <a href="/" className="text-zinc-400 hover:text-cyan-300 transition-colors">
+                Home
+              </a>
+              <a href="/audit" className="text-zinc-400 hover:text-cyan-300 transition-colors">
+                Run Audit
+              </a>
             </div>
           </div>
         </div>
-      </div>
-    </main>
+      </nav>
+
+      <main className="bg-zinc-950 min-h-screen">
+        <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+          <div className="mb-8 space-y-2">
+            <h1 className="text-3xl font-bold gradient-text">Shared Audit Results</h1>
+            <p className="text-zinc-400">
+              View the optimization recommendations from this StackAudit analysis.
+            </p>
+          </div>
+
+          <AuditResults audit={auditResult} auditId={params.id} />
+
+          {/* Lead Capture CTA */}
+          <div className="mt-12 rounded-2xl border border-blue-500/30 bg-gradient-to-br from-blue-950/30 to-cyan-950/20 p-8">
+            <h2 className="mb-4 text-2xl font-bold text-white">
+              Want to Implement These Savings?
+            </h2>
+            <p className="mb-6 text-zinc-300">
+              Get personalized recommendations for your team and automatic implementation support.
+            </p>
+            <a
+              href="/audit"
+              className="inline-block rounded-lg bg-gradient-to-r from-blue-600 to-cyan-500 px-8 py-4 font-semibold text-white hover:shadow-2xl hover:shadow-cyan-500/30 hover:scale-105 transition-all"
+            >
+              Run Your Own Audit →
+            </a>
+          </div>
+        </div>
+      </main>
+    </>
   );
 }

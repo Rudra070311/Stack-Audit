@@ -1,275 +1,151 @@
 "use client";
 
 import { useState } from "react";
-import { SubmitButton } from "../../components/audit/submit-button";
-import { SpendInput } from "../../components/audit/spend-input";
-import { TeamSize } from "../../components/audit/team-size";
-import { ToolSelector } from "../../components/audit/tool-selector";
-import { UseCaseSelector } from "../../components/audit/usecase-selector";
-import { ValidationErrors } from "../../components/audit/validation-errors";
-
-import type {
-  AuditResult,
-  ToolName,
-  UseCase,
-} from "../../types/audit";
+import { MultiToolForm } from "@/components/audit/multi-tool-form";
+import { AuditResults } from "@/components/results/audit-results";
+import type { AuditFormData, AuditResult } from "@/types/audit";
 
 export default function AuditPage() {
-  const [tool, setTool] =
-    useState<ToolName>("Cursor");
-
-  const [monthlySpend, setMonthlySpend] =
-    useState(50);
-
-  const [teamSize, setTeamSize] =
-    useState(5);
-
-  const [useCase, setUseCase] =
-    useState<UseCase>("coding");
-
-  const [loading, setLoading] =
-    useState(false);
-
-  const [error, setError] =
-    useState("");
-
-  const [audit, setAudit] =
-    useState<AuditResult | null>(
-      null
-    );
-
-  const [summary, setSummary] =
-    useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [audit, setAudit] = useState<AuditResult | null>(null);
+  const [summary, setSummary] = useState("");
+  const [auditId, setAuditId] = useState("");
 
   async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement>
+    tools: AuditFormData["tools"],
+    teamSize: number,
+    useCase: AuditFormData["useCase"]
   ) {
-    e.preventDefault();
-
     setError("");
-
     setAudit(null);
-
     setSummary("");
-
-    if (monthlySpend <= 0) {
-      setError(
-        "Please enter a valid monthly spend."
-      );
-
-      return;
-    }
-
     setLoading(true);
 
     try {
-      const auditResponse =
-        await fetch("/api/audit", {
-          method: "POST",
+      // Run the audit
+      const auditResponse = await fetch("/api/audit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tools,
+          teamSize,
+          useCase,
+        }),
+      });
 
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-
-          body: JSON.stringify({
-            tool,
-            monthlySpend,
-            teamSize,
-            useCase,
-          }),
-        });
-
-      const auditData =
-        await auditResponse.json();
+      const auditData = await auditResponse.json();
 
       if (!auditData.success) {
-        throw new Error(
-          auditData.error
-        );
+        throw new Error(auditData.error || "Failed to run audit");
       }
 
       setAudit(auditData.audit);
+      setAuditId(auditData.auditId);
 
-      const summaryResponse =
-        await fetch(
-          "/api/ai-summary",
-          {
-            method: "POST",
+      // Generate AI summary
+      try {
+        const summaryResponse = await fetch("/api/ai-summary", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            totalCurrentSpend: auditData.audit.totalCurrentSpend,
+            totalOptimizedSpend: auditData.audit.totalOptimizedSpend,
+            totalAnnualSavings: auditData.audit.totalAnnualSavings,
+            teamSize: auditData.audit.teamSize,
+            useCase: auditData.audit.useCase,
+            tools: auditData.audit.tools,
+          }),
+        });
 
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-
-            body: JSON.stringify({
-              tool,
-
-              monthlySpend,
-
-              teamSize,
-
-              useCase,
-
-              monthlySavings:
-                auditData.audit
-                  .monthlySavings,
-
-              annualSavings:
-                auditData.audit
-                  .annualSavings,
-
-              recommendation:
-                auditData.audit
-                  .recommendation,
-            }),
-          }
-        );
-
-      const summaryData =
-        await summaryResponse.json();
-
-      if (summaryData.success) {
-        setSummary(
-          summaryData.summary
-        );
+        const summaryData = await summaryResponse.json();
+        if (summaryData.success) {
+          setSummary(summaryData.summary);
+        }
+      } catch (summaryError) {
+        console.error("Failed to generate summary:", summaryError);
+        // Continue even if summary fails
       }
     } catch (err) {
-      console.error(err);
-
-      setError(
-        "Failed to generate audit."
-      );
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   return (
-    <main className="min-h-screen bg-black px-6 py-16 text-white">
-      <div className="mx-auto max-w-3xl">
-        <form
-          onSubmit={handleSubmit}
-          className="
-            rounded-3xl border border-zinc-800
-            bg-zinc-900/50 p-8
-            backdrop-blur
-          "
-        >
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold">
-              StackAudit
-            </h1>
+    <>
+      <nav className="sticky top-0 z-40 border-b border-zinc-800/20 bg-zinc-950/60 backdrop-blur-2xl">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 via-cyan-400 to-blue-400" />
+              <span className="text-lg font-bold gradient-text">StackAudit</span>
+            </div>
+            <div className="hidden gap-8 sm:flex">
+              <a href="/" className="text-zinc-400 hover:text-cyan-300 transition-colors">
+                Home
+              </a>
+              <a href="/audit" className="text-cyan-300 font-medium">
+                Audit
+              </a>
+              <a href="/features" className="text-zinc-400 hover:text-cyan-300 transition-colors">
+                Features
+              </a>
+              <a href="/pricing" className="text-zinc-400 hover:text-cyan-300 transition-colors">
+                Pricing
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
 
-            <p className="mt-3 text-zinc-400">
-              Audit your AI stack and
-              identify unnecessary spend
-              across coding, writing,
-              research, and API tooling.
+      <main className="bg-zinc-950 min-h-screen">
+        <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div className="mb-12 space-y-4">
+            <h1 className="text-4xl font-bold gradient-text">AI Tool Spend Audit</h1>
+            <p className="text-lg text-zinc-400">
+              Enter your current AI tool stack to discover optimization opportunities and save
+              money.
             </p>
           </div>
 
-          <div className="space-y-6">
-            <ToolSelector
-              value={tool}
-              onChange={setTool}
-            />
+          {/* Form or Results */}
+          {!audit ? (
+            <div className="rounded-3xl border border-zinc-800/60 bg-gradient-to-br from-zinc-900/60 to-zinc-800/30 p-8">
+              <MultiToolForm onSubmit={handleSubmit} isLoading={loading} />
 
-            <SpendInput
-              value={monthlySpend}
-              onChange={
-                setMonthlySpend
-              }
-            />
-
-            <TeamSize
-              value={teamSize}
-              onChange={setTeamSize}
-            />
-
-            <UseCaseSelector
-              value={useCase}
-              onChange={setUseCase}
-            />
-
-            <ValidationErrors
-              message={error}
-            />
-
-            <SubmitButton
-              loading={loading}
-            />
-          </div>
-        </form>
-
-        {audit && (
-          <div
-            className="
-              mt-10 rounded-3xl
-              border border-zinc-800
-              bg-zinc-900/50 p-8
-            "
-          >
-            <div className="mb-8">
-              <p className="text-sm uppercase tracking-wide text-zinc-500">
-                Estimated Savings
-              </p>
-
-              <h2 className="mt-2 text-5xl font-bold">
-                $
-                {
-                  audit.monthlySavings
-                }
-                /mo
-              </h2>
-
-              <p className="mt-2 text-zinc-400">
-                Around $
-                {
-                  audit.annualSavings
-                }{" "}
-                annually
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <p className="text-zinc-500">
-                  Recommendation
-                </p>
-
-                <p className="mt-1 text-lg">
-                  {
-                    audit.recommendation
-                  }
-                </p>
-              </div>
-
-              <div>
-                <p className="text-zinc-500">
-                  Reasoning
-                </p>
-
-                <p className="mt-1 whitespace-pre-line text-zinc-300">
-                  {audit.reasoning}
-                </p>
-              </div>
-
-              {summary && (
-                <div>
-                  <p className="text-zinc-500">
-                    AI Summary
-                  </p>
-
-                  <p className="mt-1 text-zinc-300">
-                    {summary}
-                  </p>
+              {error && (
+                <div className="mt-6 rounded-lg border border-red-500/30 bg-red-950/30 px-4 py-3 text-red-300">
+                  <p className="text-sm">Error: {error}</p>
                 </div>
               )}
             </div>
-          </div>
-        )}
-      </div>
-    </main>
+          ) : (
+            <AuditResults audit={audit} summary={summary} auditId={auditId} />
+          )}
+
+          {/* Show form edit button when results are displayed */}
+          {audit && (
+            <div className="mt-8 text-center">
+              <button
+                onClick={() => {
+                  setAudit(null);
+                  setSummary("");
+                }}
+                className="rounded-lg border border-zinc-700 bg-zinc-900 px-6 py-3 font-medium text-zinc-300 hover:border-cyan-500/50 hover:text-cyan-300 transition-all"
+              >
+                ← Back to Edit
+              </button>
+            </div>
+          )}
+        </div>
+      </main>
+    </>
   );
 }
