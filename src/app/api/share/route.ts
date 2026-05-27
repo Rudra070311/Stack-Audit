@@ -6,7 +6,8 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const shareId = body.audit?.auditId || generateId();
-    const origin = request.nextUrl.origin;
+    const origin = request.nextUrl?.origin ?? "";
+    const base = process.env.NEXT_PUBLIC_APP_URL || origin || "https://stack_audit.vercel.app";
 
     // Store the audit in Supabase for the share page
     if (body.audit) {
@@ -32,10 +33,22 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Build a payload URL (base64url encoded) so shares work even if DB storage fails.
+    let payloadUrl: string | undefined;
+    try {
+      if (body.audit) {
+        const encoded = Buffer.from(JSON.stringify(body.audit)).toString("base64url");
+        payloadUrl = `${base}/results/${shareId}?payload=${encoded}`;
+      }
+    } catch (e) {
+      // ignore encoding errors
+    }
+
     return NextResponse.json({
       success: true,
       id: shareId,
-      shareUrl: `${process.env.NEXT_PUBLIC_APP_URL || origin}/results/${shareId}`,
+      shareUrl: `${base}/results/${shareId}`,
+      payloadUrl,
       data: body,
     });
   } catch (error) {
