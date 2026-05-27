@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
+import "../../styles/la.css";
+import "../../styles/components.css";
+import "../../styles/audit-page.css";
 
 export const metadata: Metadata = {
 	title: "Stack Audit",

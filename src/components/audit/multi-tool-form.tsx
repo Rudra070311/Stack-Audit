@@ -97,15 +97,17 @@ export function MultiToolForm({ onSubmit, isLoading = false }: MultiToolFormProp
   const costPerDev = teamSize > 0 ? totalSpend / teamSize : 0;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="mx-auto max-w-4xl space-y-8">
       {/* Team Info Section */}
-      <div className="space-y-4 rounded-2xl border border-zinc-800/60 bg-gradient-to-br from-zinc-900/60 to-zinc-800/30 p-6">
-        <h3 className="text-lg font-semibold text-white">Team & Use Case</h3>
+      <div className="space-y-6 rounded-[2rem] border border-zinc-800/60 bg-gradient-to-br from-zinc-900/60 to-zinc-800/30 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.24)] sm:p-8">
+        <h3 className="text-center text-xl font-semibold tracking-tight text-white sm:text-2xl">
+          Team & Use Case
+        </h3>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           {/* Team Size */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-zinc-300">
+            <label className="block text-sm font-medium text-zinc-300 sm:text-[0.95rem]">
               Team Size
             </label>
             <input
@@ -114,20 +116,20 @@ export function MultiToolForm({ onSubmit, isLoading = false }: MultiToolFormProp
               max={1000}
               value={teamSize}
               onChange={(e) => setTeamSize(Math.max(1, Number(e.target.value)))}
-              className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-base text-white transition-colors focus:border-cyan-500 focus:outline-none"
             />
-            <p className="text-xs text-zinc-400">Number of team members</p>
+            <p className="text-sm text-zinc-400">Number of team members</p>
           </div>
 
           {/* Use Case */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-zinc-300">
+            <label className="block text-sm font-medium text-zinc-300 sm:text-[0.95rem]">
               Primary Use Case
             </label>
             <select
               value={useCase}
               onChange={(e) => setUseCase(e.target.value as UseCase)}
-              className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-white focus:border-cyan-500 focus:outline-none"
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-base text-white transition-colors focus:border-cyan-500 focus:outline-none"
             >
               {USE_CASES.map((uc) => (
                 <option key={uc} value={uc}>
@@ -139,16 +141,16 @@ export function MultiToolForm({ onSubmit, isLoading = false }: MultiToolFormProp
         </div>
 
         {/* Cost Summary */}
-        <div className="flex justify-between rounded-lg bg-zinc-800/40 px-4 py-3">
+        <div className="grid gap-4 rounded-2xl bg-zinc-800/40 px-5 py-5 text-center sm:grid-cols-2 sm:px-6">
           <div>
-            <p className="text-xs text-zinc-400">Total Monthly Spend</p>
-            <p className="text-2xl font-bold text-cyan-400">
+            <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">Total Monthly Spend</p>
+            <p className="text-3xl font-bold tracking-tight text-cyan-400 sm:text-4xl">
               ${totalSpend.toFixed(2)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-zinc-400">Per Developer/Month</p>
-            <p className="text-2xl font-bold text-blue-400">
+            <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">Per Developer/Month</p>
+            <p className="text-3xl font-bold tracking-tight text-blue-400 sm:text-4xl">
               ${costPerDev.toFixed(2)}
             </p>
           </div>
@@ -156,13 +158,15 @@ export function MultiToolForm({ onSubmit, isLoading = false }: MultiToolFormProp
       </div>
 
       {/* Tools Section */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-white">AI Tools & Spend</h3>
+      <div className="space-y-5">
+        <div className="flex items-center justify-between gap-4">
+          <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+            AI Tools & Spend
+          </h3>
           <button
             type="button"
             onClick={addTool}
-            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 transition-all"
+            className="flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 sm:px-5 sm:py-3 sm:text-base"
           >
             <Plus size={16} />
             Add Tool
@@ -185,7 +189,7 @@ export function MultiToolForm({ onSubmit, isLoading = false }: MultiToolFormProp
         <button
           type="button"
           onClick={saveFormState}
-          className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-6 py-3 font-medium text-zinc-300 hover:border-cyan-500/50 hover:text-cyan-300 transition-all"
+          className="flex flex-1 items-center justify-center gap-2 rounded-full border border-zinc-700 bg-zinc-900 px-6 py-3.5 font-medium text-zinc-300 transition-all hover:border-cyan-500/50 hover:text-cyan-300"
         >
           <Save size={18} />
           Save Form
@@ -194,14 +198,14 @@ export function MultiToolForm({ onSubmit, isLoading = false }: MultiToolFormProp
         <button
           type="submit"
           disabled={isLoading || tools.length === 0}
-          className="flex-1 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-3 font-medium text-white hover:shadow-2xl hover:shadow-cyan-500/30 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-3.5 font-medium text-white transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/30 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isLoading ? "Auditing..." : "Run Audit"}
         </button>
       </div>
 
       {showSaved && (
-        <div className="rounded-lg border border-emerald-500/50 bg-emerald-950/30 px-4 py-3 text-sm text-emerald-300">
+        <div className="rounded-xl border border-emerald-500/50 bg-emerald-950/30 px-4 py-3 text-sm text-emerald-300">
           ✓ Form saved to local storage
         </div>
       )}
@@ -221,11 +225,11 @@ function ToolRow({ tool, onUpdate, onRemove, canRemove }: ToolRowProps) {
   const plans = toolConfig ? Object.keys(toolConfig.plans) : [];
 
   return (
-    <div className="rounded-2xl border border-zinc-800/60 bg-gradient-to-br from-zinc-900/60 to-zinc-800/30 p-4">
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-5 md:gap-4">
+    <div className="rounded-[1.75rem] border border-zinc-800/60 bg-gradient-to-br from-zinc-900/60 to-zinc-800/30 p-5 shadow-[0_16px_50px_rgba(0,0,0,0.22)] sm:p-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:gap-4">
         {/* Tool Selector */}
         <div className="space-y-1">
-          <label className="block text-xs font-medium text-zinc-400">Tool</label>
+          <label className="block text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Tool</label>
           <select
             value={tool.name}
             onChange={(e) => {
@@ -237,7 +241,7 @@ function ToolRow({ tool, onUpdate, onRemove, canRemove }: ToolRowProps) {
                 onUpdate("plan", newConfig.defaultPlan);
               }
             }}
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none"
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-3 text-base text-white transition-colors focus:border-cyan-500 focus:outline-none"
           >
             {TOOLS.map((t) => (
               <option key={t} value={t}>
@@ -249,11 +253,11 @@ function ToolRow({ tool, onUpdate, onRemove, canRemove }: ToolRowProps) {
 
         {/* Plan Selector */}
         <div className="space-y-1">
-          <label className="block text-xs font-medium text-zinc-400">Plan</label>
+          <label className="block text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Plan</label>
           <select
             value={tool.plan}
             onChange={(e) => onUpdate("plan", e.target.value)}
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none"
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-3 text-base text-white transition-colors focus:border-cyan-500 focus:outline-none"
           >
             {plans.map((plan) => (
               <option key={plan} value={plan}>
@@ -265,7 +269,7 @@ function ToolRow({ tool, onUpdate, onRemove, canRemove }: ToolRowProps) {
 
         {/* Monthly Spend */}
         <div className="space-y-1">
-          <label className="block text-xs font-medium text-zinc-400">
+          <label className="block text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
             Monthly Spend ($)
           </label>
           <input
@@ -274,13 +278,13 @@ function ToolRow({ tool, onUpdate, onRemove, canRemove }: ToolRowProps) {
             step={0.01}
             value={tool.monthlySpend}
             onChange={(e) => onUpdate("monthlySpend", Number(e.target.value))}
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none"
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-3 text-base text-white transition-colors focus:border-cyan-500 focus:outline-none"
           />
         </div>
 
         {/* Number of Seats */}
         <div className="space-y-1">
-          <label className="block text-xs font-medium text-zinc-400">
+          <label className="block text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
             Number of Seats
           </label>
           <input
@@ -288,17 +292,17 @@ function ToolRow({ tool, onUpdate, onRemove, canRemove }: ToolRowProps) {
             min={1}
             value={tool.seats}
             onChange={(e) => onUpdate("seats", Math.max(1, Number(e.target.value)))}
-            className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none"
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-3 text-base text-white transition-colors focus:border-cyan-500 focus:outline-none"
           />
         </div>
 
         {/* Remove Button */}
-        <div className="flex items-end justify-end">
+        <div className="flex items-end justify-start md:justify-end">
           <button
             type="button"
             onClick={onRemove}
             disabled={!canRemove}
-            className="rounded-lg border border-red-500/30 bg-red-950/20 px-3 py-2 text-red-400 hover:border-red-500 hover:bg-red-950/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="rounded-xl border border-red-500/30 bg-red-950/20 px-3 py-3 text-red-400 transition-all hover:border-red-500 hover:bg-red-950/40 disabled:cursor-not-allowed disabled:opacity-50"
             title={canRemove ? "Remove tool" : "Must keep at least one tool"}
           >
             <Trash2 size={18} />

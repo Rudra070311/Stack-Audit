@@ -135,10 +135,28 @@ export async function runAuditEngine({
       spendPerDev
     );
 
-  const alternative =
+  const alternativeText =
     getAlternativeSuggestion(
       tool
     );
+
+  // Build alternatives array for the result
+  const alternatives = [];
+  if (tool.toLowerCase() === "cursor") {
+    alternatives.push({
+      tool: "Copilot",
+      plan: "Individual",
+      monthlySpend: 10,
+      reason: "Lighter coding workflows at half the cost",
+    });
+  } else if (tool.toLowerCase() === "chatgpt" || tool.toLowerCase() === "openai") {
+    alternatives.push({
+      tool: "Claude",
+      plan: "Pro",
+      monthlySpend: 20,
+      reason: "Better pricing for similar capability",
+    });
+  }
 
   const credexEligible =
     shouldRecommendCredex(
@@ -165,7 +183,7 @@ ${result.reasoning}
 
 ${benchmark.message}
 
-${alternative}
+${alternativeText}
 
 ${
   credexEligible
@@ -173,6 +191,7 @@ ${
     : ""
 }
     `,
+    alternatives: alternatives.length > 0 ? alternatives : undefined,
 
     useCase,
 

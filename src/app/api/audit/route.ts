@@ -1,74 +1,110 @@
 import { NextRequest, NextResponse } from "next/server";
-import { runAudit, classifySavingsLevel } from "@/lib/audit-engine";
-import { storeAudit, saveLead } from "@/lib/supabase";
-import type { AuditFormData } from "@/types/audit";
+import { runAuditEngine } from "../../../lib/audit-engine/engine";
+import { generateId } from "../../../lib/utils/ids";
 
-/**
- * POST /api/audit
- * Run an audit on the provided tools and return recommendations
- */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { tools, teamSize, useCase, email, company_name, role } = body as AuditFormData & {
-      email?: string;
-      company_name?: string;
-      role?: string;
-    };
-
-    // Validate input
-    if (!tools || !Array.isArray(tools) || tools.length === 0) {
-      return NextResponse.json(
-        { success: false, error: "At least one tool is required" },
-        { status: 400 }
-      );
-    }
-
-    if (!teamSize || teamSize < 1) {
-      return NextResponse.json(
-        { success: false, error: "Valid team size is required" },
-        { status: 400 }
-      );
-    }
-
-    // Run the audit
-    const audit = runAudit({ tools, teamSize, useCase });
-
-    // Save lead if email provided
-    let leadId: string | undefined;
-    if (email) {
+    let body;
+    try {
+      body = await request.json();
+    } catch (parseErr) {
       try {
-        const lead = await saveLead(email, {
-          company_name,
-          role,
-          team_size: teamSize,
-        });
-        leadId = lead.id;
-
-        // Store the audit in the database
-        await storeAudit(audit, leadId, true);
-      } catch (dbError) {
-        console.error("Database error:", dbError);
-        // Continue even if database save fails - return the audit result
+        const text = await request.clone().text();
+        console.error("Audit API: failed to parse JSON body. Raw body:", text);
+      } catch (e) {
+        console.error("Audit API: failed to read raw body to log parse error.", e);
       }
+      throw parseErr;
     }
 
-    // Classify savings level for UI messaging
-    const savingsLevel = classifySavingsLevel(audit.totalAnnualSavings);
+    const { tools, teamSize, useCase } = body;
+
+    // Support both single tool (legacy) and multiple tools
+    const toolList = Array.isArray(tools) ? tools : [body];
+
+    if (!toolList || toolList.length === 0 || !teamSize || !useCase) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Missing required audit fields: tools, teamSize, useCase",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Process each tool through the audit engine
+    const perToolAudits = await Promise.all(
+      toolList.map(async (toolData: any) => {
+        const tool = toolData.name || toolData.tool;
+        const monthlySpend = Number(toolData.monthlySpend || toolData.spend || 0);
+        const seats = Number(toolData.seats || 1);
+
+        const result = await runAuditEngine({
+          tool,
+          monthlySpend,
+          teamSize: Math.max(teamSize, seats),
+          useCase,
+          seats,
+        });
+
+        return {
+          tool: result.tool as any,
+          plan: toolData.plan || "Standard",
+          currentSpend: result.currentSpend,
+          currentPlan: toolData.plan || "Standard",
+          optimizedPlan: result.recommendation.split("\n")[0] || "Optimized",
+          optimizedSpend: result.optimizedSpend,
+          monthlySavings: result.monthlySavings,
+          annualSavings: result.annualSavings,
+          recommendation: result.recommendation,
+          reasoning: result.reasoning,
+          alternatives: result.alternatives,
+        };
+      })
+    );
+
+    // Calculate totals
+    const totalCurrentSpend = perToolAudits.reduce(
+      (sum: number, tool: any) => sum + tool.currentSpend,
+      0
+    );
+    const totalOptimizedSpend = perToolAudits.reduce(
+      (sum: number, tool: any) => sum + tool.optimizedSpend,
+      0
+    );
+    const totalMonthlySavings = perToolAudits.reduce(
+      (sum: number, tool: any) => sum + tool.monthlySavings,
+      0
+    );
+    const totalAnnualSavings = totalMonthlySavings * 12;
+    const savingsPercentage =
+      totalCurrentSpend > 0 ? (totalMonthlySavings / totalCurrentSpend) * 100 : 0;
+
+    const auditId = generateId();
 
     return NextResponse.json({
       success: true,
-      audit,
-      savingsLevel,
-      auditId: audit.auditId,
-      leadId,
+      auditId,
+      audit: {
+        auditId,
+        timestamp: new Date().toISOString(),
+        tools: perToolAudits,
+        teamSize,
+        useCase,
+        totalCurrentSpend,
+        totalOptimizedSpend,
+        totalMonthlySavings,
+        totalAnnualSavings,
+        savingsPercentage,
+      },
     });
   } catch (error) {
-    console.error("Audit error:", error);
+    console.error("Audit API Error:", error);
+
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to run audit",
+        error: "Failed to generate audit",
       },
       { status: 500 }
     );

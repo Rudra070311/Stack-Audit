@@ -1,6 +1,6 @@
 "use client";
-
-import "./globals.css";
+import "../../public/New/windsurf.svg";
+import Link from "next/link";
 import {
   ChevronRight,
   Zap,
@@ -10,235 +10,115 @@ import {
   BarChart3,
   ArrowUpRight,
   Code,
+  Shield,
+  Clock,
+  DollarSign,
+  CheckCircle,
 } from "lucide-react";
+
+import "../../styles/landing.css";
 
 export default function MainPage() {
   return (
     <>
-      {/* Skip to content for accessibility */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-cyan-500 focus:text-white focus:rounded-lg"
-      >
-        Skip to main content
-      </a>
-
-      {/* Navigation */}
-      <nav
-        className="sticky top-0 z-40 border-b border-zinc-800/20 bg-zinc-950/60 backdrop-blur-2xl"
-        role="navigation"
-        aria-label="Main navigation"
-      >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2.5 group cursor-pointer">
-            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 via-cyan-400 to-blue-400 rounded-xl flex items-center justify-center font-bold text-sm text-zinc-950 shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/60 transition-all duration-300 group-hover:scale-105">
-              SA
-            </div>
-            <span className="font-bold text-base text-zinc-50 tracking-tight">
-              StackAudit
-            </span>
+      <nav className="nav">
+        <div className="nav-container">
+          <div className="nav-brand">
+            <div className="nav-logo"><img src="./public/new/stackaudit-logo.svg" alt="StackAudit" /></div>
+            <span className="nav-brand-name">StackAudit</span>
           </div>
-          <div className="hidden md:flex items-center gap-10">
-            <a
-              href="#features"
-              className="text-sm font-medium text-zinc-400 hover:text-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-md transition-all duration-300 relative group"
-            >
-              Features
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full focus-visible:w-full transition-all duration-300" />
-            </a>
-            <a
-              href="#how-it-works"
-              className="text-sm font-medium text-zinc-400 hover:text-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-md transition-all duration-300 relative group"
-            >
-              How It Wors
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full focus-visible:w-full transition-all duration-300" />
-            </a>
-            <a
-              href="#"
-              className="text-sm font-medium text-zinc-400 hover:text-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-md transition-all duration-300 relative group"
-            >
-              Pricing
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full focus-visible:w-full transition-all duration-300" />
-            </a>
+          <div className="nav-links">
+            <a href="#features" className="nav-link">Features</a>
+            <a href="#how-it-works" className="nav-link">How It Works</a>
+            <a href="#" className="nav-link">Pricing</a>
           </div>
         </div>
       </nav>
 
-      <main id="main-content" className="bg-zinc-950">
+      <main>
         {/* Hero Section */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8 pt-16 pb-20">
-          {/* Animated background */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl opacity-20 animate-glow-pulse" />
-            <div
-              className="absolute top-1/3 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full blur-3xl opacity-20 animate-glow-pulse"
-              style={{ animationDelay: "1s" }}
-            />
-            <div className="absolute -bottom-1/4 left-1/2 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl opacity-10" />
-            {/* Subtle grid pattern */}
-            <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]" />
+        <section className="hero">
+          <div className="hero-bg">
+            <div className="hero-glow hero-glow-1" />
+            <div className="hero-glow hero-glow-2" />
           </div>
 
-          <div className="relative z-10 max-w-4xl mx-auto text-center">
-            {/* Trust badge */}
-            <div className="mb-8 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-sm text-zinc-400 font-medium">
-                No login required • Free audit
-              </span>
+          <div className="hero-content">
+            <div className="hero-badge">
+              <span className="hero-badge-dot" />
+              <span className="hero-badge-text">No login required • Free audit</span>
             </div>
 
-            {/* Main headline */}
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 tracking-tight leading-tight">
-              <span className="text-zinc-50">You're probably </span>
-              <span className="gradient-text">overspending on AI</span>
-              <span className="text-zinc-50">.</span>
+            <h1 className="hero-title">
+              You&apos;re probably <span className="gradient-text">overspending on AI</span>.
             </h1>
 
-            {/* Subheadline */}
-            <p className="text-lg sm:text-xl text-zinc-400 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
-              Teams waste thousands yearly on overlapping AI coding tools.
-              StackAudit analyzes your stack in seconds and shows exactly where
-              to cut costs.
+            <p className="hero-subtitle">
+              Teams waste thousands yearly on overlapping AI coding tools. StackAudit analyzes your stack in seconds and shows exactly where to cut costs.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <button className="group relative px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold text-lg hover:from-blue-500 hover:to-cyan-400 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/40 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 flex items-center justify-center gap-2 overflow-hidden">
-                <span className="relative z-10 flex items-center gap-2">
-                  Run Free Audit
-                  <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </button>
-              <button className="group px-8 py-4 rounded-xl border-2 border-zinc-700 text-zinc-100 font-bold text-lg hover:border-cyan-500/60 hover:bg-zinc-900/80 hover:text-cyan-300 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 flex items-center justify-center gap-2">
+            <div className="hero-actions">
+              <Link href="/audit" className="btn btn-primary">
+                Run Free Audit
+                <ArrowUpRight size={20} />
+              </Link>
+              <button className="btn btn-secondary">
                 See Example Report
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                <ChevronRight size={20} />
               </button>
             </div>
 
-            {/* Stats row */}
-            <div className="grid grid-cols-3 gap-4 mb-20 max-w-2xl mx-auto">
-              {[
-                {
-                  value: "$4.2K",
-                  label: "Avg savings found",
-                  gradient: "from-blue-300 to-cyan-300",
-                  border: "hover:border-blue-500/50",
-                  shadow: "hover:shadow-blue-500/20",
-                  bg: "from-blue-950/40",
-                },
-                {
-                  value: "45s",
-                  label: "Audit generation",
-                  gradient: "from-cyan-300 to-blue-300",
-                  border: "hover:border-cyan-500/50",
-                  shadow: "hover:shadow-cyan-500/20",
-                  bg: "from-cyan-950/40",
-                },
-                {
-                  value: "15+",
-                  label: "Tools detected",
-                  gradient: "from-emerald-300 to-cyan-300",
-                  border: "hover:border-emerald-500/50",
-                  shadow: "hover:shadow-emerald-500/20",
-                  bg: "from-emerald-950/40",
-                },
-              ].map((stat, idx) => (
-                <div
-                  key={idx}
-                  className={`group p-5 rounded-xl border border-zinc-800/60 bg-gradient-to-br ${stat.bg} to-zinc-900/30 backdrop-blur-sm ${stat.border} transition-all duration-300 hover:bg-zinc-800/40 ${stat.shadow} cursor-default`}
-                >
-                  <div
-                    className={`text-3xl font-bold bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}
-                  >
-                    {stat.value}
-                  </div>
-                  <div className="text-xs text-zinc-400 mt-2 font-medium">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Floating savings cards */}
-            <div className="relative h-64 sm:h-80 mb-12">
-              {[
-                {
-                  tool: "Claude Pro",
-                  amount: "$200",
-                  note: "unused",
-                  position: "left-0 top-0 sm:left-4 sm:top-8",
-                  delay: "0s",
-                  hoverColor: "hover:border-blue-500/50",
-                  shadowColor: "hover:shadow-blue-500/20",
-                },
-                {
-                  tool: "Cursor Seats",
-                  amount: "$450",
-                  note: "upgrade avail",
-                  position: "right-0 top-12 sm:right-4 sm:top-20",
-                  delay: "0.7s",
-                  hoverColor: "hover:border-cyan-500/50",
-                  shadowColor: "hover:shadow-cyan-500/20",
-                },
-                {
-                  tool: "Copilot Redundancy",
-                  amount: "$720",
-                  note: "can consolidate",
-                  position:
-                    "left-1/2 bottom-0 sm:left-1/4 sm:bottom-4 -translate-x-1/2 sm:translate-x-0",
-                  delay: "1.4s",
-                  hoverColor: "hover:border-purple-500/50",
-                  shadowColor: "hover:shadow-purple-500/20",
-                },
-              ].map((card, idx) => (
-                <div
-                  key={idx}
-                  className={`absolute ${card.position} animate-float group`}
-                  style={{ animationDelay: card.delay }}
-                >
-                  <div
-                    className={`p-5 rounded-xl border border-zinc-700/60 bg-gradient-to-br from-zinc-900 to-zinc-800/50 backdrop-blur-sm ${card.hoverColor} transition-all duration-300 hover:bg-zinc-800/80 ${card.shadowColor} hover:shadow-xl w-48 sm:w-56 cursor-pointer`}
-                  >
-                    <div className="text-xs text-zinc-400 mb-2 font-semibold uppercase tracking-wider">
-                      {card.tool}
-                    </div>
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-3xl font-bold text-zinc-50">
-                        {card.amount}
-                      </span>
-                      <span className="text-xs text-zinc-500 font-medium">
-                        /mo {card.note}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* AI Tools row */}
-            <div className="mt-32 pt-12 border-t border-zinc-800">
-              <div className="text-sm text-zinc-500 mb-8 font-semibold uppercase tracking-wider">
-                Supports your entire stack
+            <div className="stats-grid">
+              <div className="stat-card">
+                <div className="stat-value">$4.2K</div>
+                <div className="stat-label">Avg savings found</div>
               </div>
-              <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12">
+              <div className="stat-card">
+                <div className="stat-value">45s</div>
+                <div className="stat-label">Audit generation</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-value">15+</div>
+                <div className="stat-label">Tools detected</div>
+              </div>
+            </div>
+
+            <div className="floating-cards">
+              <div className="float-card float-card-left">
+                <div className="float-card-tool">Claude Pro</div>
+                <div className="float-card-amount">
+                  $200 <span className="float-card-note">/mo unused</span>
+                </div>
+              </div>
+              <div className="float-card float-card-right">
+                <div className="float-card-tool">Cursor Seats</div>
+                <div className="float-card-amount">
+                  $450 <span className="float-card-note">upgrade available</span>
+                </div>
+              </div>
+              <div className="float-card float-card-center">
+                <div className="float-card-tool">Copilot Redundancy</div>
+                <div className="float-card-amount">
+                  $720 <span className="float-card-note">can consolidate</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="tool-icons">
+              <div className="tool-icons-label">Supports your entire stack</div>
+              <div className="tool-icons-grid">
                 {[
-                  { name: "Cursor", emoji: "⌘" },
-                  { name: "Claude", emoji: "🧠" },
-                  { name: "OpenAI", emoji: "✨" },
-                  { name: "Gemini", emoji: "🎨" },
-                  { name: "Copilot", emoji: "💡" },
-                  { name: "Windsurf", emoji: "🌊" },
+                  { name: "Cursor", image: "../../public/new/cursor.svg" },
+                  { name: "Claude", image: "../../public/new/claude.svg" },
+                  { name: "OpenAI", image: "../../public/new/openai.svg" },
+                  { name: "Gemini", image: "../../public/new/gemini.svg" },
+                  { name: "Copilot", image: "../../public/new/copilot.svg" },
+                  { name: "Windsurf", image: "../../public/New/windsurf.svg" },
                 ].map((tool) => (
-                  <div
-                    key={tool.name}
-                    className="flex items-center gap-2 text-zinc-400 hover:text-cyan-300 transition-all duration-300 cursor-pointer group"
-                  >
-                    <span className="text-2xl group-hover:scale-125 transition-transform duration-300">
-                      {tool.emoji}
-                    </span>
-                    <span className="text-sm font-semibold">{tool.name}</span>
+                  <div key={tool.name} className="tool-item">
+                    <img src={tool.image} alt={tool.name} className="tool-image" />
+                    <span className="tool-name">{tool.name}</span>
+                    <img src="../../public/New/windsurf.svg" alt="Supported" className="tool-check" />
                   </div>
                 ))}
               </div>
@@ -246,8 +126,242 @@ export default function MainPage() {
           </div>
         </section>
 
-        {/* Rest of sections (Social Proof, Features, How It Works, Live Preview, Testimonials, Final CTA, Footer) follow the same pattern */}
-        {/* ... (I'm including a compact, fully improved version below to keep the answer focused) */}
+        {/* Opportunity Section */}
+        <section className="section">
+          <div className="section-inner">
+            <div className="text-center">
+              <h2 className="section-title">The opportunity is massive</h2>
+              <p className="section-subtitle">
+                Engineering teams are throwing away thousands on overlapping subscriptions. We help them find it fast.
+              </p>
+            </div>
+
+            <div className="opportunity-grid">
+              <div className="opportunity-card">
+                <div className="opportunity-icon"><TrendingDown size={28} /></div>
+                <div className="opportunity-value">$3,200+</div>
+                <div className="opportunity-label">Monthly waste per team</div>
+              </div>
+              <div className="opportunity-card">
+                <div className="opportunity-icon"><Zap size={28} /></div>
+                <div className="opportunity-value">4.2 average</div>
+                <div className="opportunity-label">Tools per developer</div>
+              </div>
+              <div className="opportunity-card">
+                <div className="opportunity-icon"><BarChart3 size={28} /></div>
+                <div className="opportunity-value">38% of costs</div>
+                <div className="opportunity-label">Overlap detected</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section id="features" className="section">
+          <div className="section-inner">
+            <div className="text-center">
+              <h2 className="section-title">Built for engineering teams</h2>
+              <p className="section-subtitle">Deep analysis without the clutter. Run a full audit in 45 seconds.</p>
+            </div>
+
+            <div className="features-grid">
+              {[
+                { icon: Zap, title: "Instant AI spend audit", desc: "Upload your stack and get a complete spend analysis in seconds, not hours." },
+                { icon: BarChart3, title: "Benchmark per developer", desc: "See exactly how much each developer's tooling costs and compare across teams." },
+                { icon: Sparkles, title: "AI recommendations", desc: "Get personalized suggestions on which tools to consolidate or upgrade." },
+                { icon: Share2, title: "Shareable audit links", desc: "Share results with your team and leadership instantly. No account required." },
+                { icon: TrendingDown, title: "Vendor downgrades", desc: "Find plans that fit your usage patterns and save immediately." },
+                { icon: Shield, title: "Smart summaries", desc: "AI-generated executive summary of findings and next steps." },
+              ].map((feature, idx) => {
+                const Icon = feature.icon;
+                return (
+                  <div key={idx} className="feature-card">
+                    <div className="feature-icon"><Icon size={24} /></div>
+                    <h3 className="feature-title">{feature.title}</h3>
+                    <p className="feature-desc">{feature.desc}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works */}
+        <section id="how-it-works" className="section">
+          <div className="section-inner">
+            <div className="text-center">
+              <h2 className="section-title">Simple process, powerful results</h2>
+              <p className="section-subtitle">Get your audit in three simple steps.</p>
+            </div>
+
+            <div className="steps-grid">
+              {[
+                { step: 1, title: "Enter your stack", desc: "List the AI tools your team uses. Takes 2 minutes. No login needed.", detail: "Cursor, Claude, OpenAI, Copilot, Gemini, and more." },
+                { step: 2, title: "Analyze spend", desc: "Our AI analyzes overlaps, usage patterns, and pricing tiers.", detail: "Benchmarks your costs against similar teams." },
+                { step: 3, title: "Get recommendations", desc: "See exactly where you can save and how much you'll cut costs.", detail: "Share the report with your team instantly." },
+              ].map((item) => (
+                <div key={item.step} className="step-card">
+                  <div className="step-number">{item.step}</div>
+                  <div className="step-content">
+                    <h3 className="step-title">{item.title}</h3>
+                    <p className="step-desc">{item.desc}</p>
+                    <p className="step-detail">{item.detail}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Live Preview */}
+        <section className="section">
+          <div className="section-inner">
+            <div className="text-center">
+              <h2 className="section-title">See your savings in real-time</h2>
+              <p className="section-subtitle">This is what your audit report looks like.</p>
+            </div>
+
+            <div className="preview-container">
+              <div className="preview-glow" />
+              <div className="preview-card">
+                <div className="preview-header">
+                  <div>
+                    <div className="preview-label">Your AI Stack Audit</div>
+                    <h3 className="preview-title">Engineering Team Report</h3>
+                  </div>
+                  <div className="preview-meta">
+                    <div className="preview-date">Generated today</div>
+                    <button className="preview-share-btn">
+                      <Share2 size={16} /> Share
+                    </button>
+                  </div>
+                </div>
+
+                <div className="preview-metrics">
+                  <div className="metric-card">
+                    <div className="metric-label">Monthly savings available</div>
+                    <div className="metric-value">$3,840</div>
+                    <div className="metric-note">33% of current spend</div>
+                  </div>
+                  <div className="metric-card">
+                    <div className="metric-label">Recommended spend</div>
+                    <div className="metric-value">$7,700</div>
+                    <div className="metric-note">Down from $11,540</div>
+                  </div>
+                  <div className="metric-card">
+                    <div className="metric-label">Annual impact</div>
+                    <div className="metric-value">$46,080</div>
+                    <div className="metric-note">Full year savings</div>
+                  </div>
+                </div>
+
+                <div className="preview-recommendations">
+                  <h4 className="reco-title">Top Recommendations</h4>
+                  <ul className="reco-list">
+                    <li className="reco-item"><CheckCircle size={16} className="reco-icon" /> Consolidate Cursor & Copilot Pro — Save $300/mo</li>
+                    <li className="reco-item"><CheckCircle size={16} className="reco-icon" /> Downgrade Claude Pro → Claude Teams — Save $1,200/mo</li>
+                    <li className="reco-item"><CheckCircle size={16} className="reco-icon" /> Remove Gemini Advanced — Save $320/mo</li>
+                  </ul>
+                </div>
+
+                <div className="preview-summary">
+                  <div className="summary-title"><Sparkles size={16} /> AI Summary</div>
+                  <p className="summary-text">Your team is spending ~$11,540/month across 5 AI tools. By consolidating to a <span className="summary-highlight">focused stack of 3 tools</span>, you can reduce costs by 33%.</p>
+                </div>
+
+                <div className="preview-share-link">
+                  <div className="share-link-label">Share this report</div>
+                  <div className="share-link-box">
+                    <code className="share-link-url">stackaudit.io/r/team-xyz-4k2m</code>
+                    <button className="share-link-copy">Copy</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials */}
+        <section className="section">
+          <div className="section-inner">
+            <div className="text-center">
+              <h2 className="section-title">Trusted by engineering teams</h2>
+            </div>
+
+            <div className="testimonials-grid">
+              {[
+                { name: "Rudra Pratap Sinha", role: "Startup Founder, Investt", content: "This tool helped me find better tools leading to significant cost savings that could have been wasted.", initials: "AC" },
+              ].map((t) => (
+                <div key={t.name} className="testimonial-card">
+                  <div className="testimonial-quote">“</div>
+                  <p className="testimonial-text">{t.content}</p>
+                  <div className="testimonial-author">
+                    <div className="author-avatar">{t.initials}</div>
+                    <div>
+                      <div className="author-name">{t.name}</div>
+                      <div className="author-role">{t.role}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="section final-cta">
+          <h2 className="final-title">Stop paying retail for AI tooling</h2>
+          <p className="final-subtitle">Your free audit is ready. See exactly where your team is overspending and how to fix it in seconds.</p>
+          <Link href="/audit" className="btn btn-primary final-btn">
+            Generate Free Audit <ArrowUpRight size={20} />
+          </Link>
+          <p className="trust-text">Trusted by 500+ engineering teams • No credit card required</p>
+        </section>
+
+        {/* Footer */}
+        <footer className="footer">
+          <div className="footer-inner">
+            <div className="footer-grid">
+              <div>
+                <div className="footer-brand">
+                  <div className="footer-logo"><img src="./public/new/stackaudit-logo.svg" alt="StackAudit" /></div>
+                  <span style={{ fontWeight: 600, color: "#fff" }}>StackAudit</span>
+                </div>
+                <p className="footer-tagline">Instant AI spend audits for engineering teams.</p>
+              </div>
+              <div>
+                <h4 className="footer-heading">Product</h4>
+                <ul className="footer-links">
+                  <li><a href="#features" className="footer-link">Features</a></li>
+                  <li><a href="#" className="footer-link">Pricing</a></li>
+                  <li><a href="#" className="footer-link">Documentation</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="footer-heading">Company</h4>
+                <ul className="footer-links">
+                  <li><a href="#" className="footer-link">Blog</a></li>
+                  <li><a href="#" className="footer-link">Changelog</a></li>
+                  <li><a href="#" className="footer-link">Status</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="footer-heading">Legal</h4>
+                <ul className="footer-links">
+                  <li><a href="#" className="footer-link">Privacy</a></li>
+                  <li><a href="#" className="footer-link">Terms</a></li>
+                  <li><a href="#" className="footer-link">Contact</a></li>
+                </ul>
+              </div>
+            </div>
+            <div className="footer-bottom">
+              <span>© 2026 StackAudit. Built with Next.js, Claude & ❤️.</span>
+              <a href="https://github.com/Rudra070311/Stack-Audit" className="footer-github">
+                <Code size={16} /> GitHub
+              </a>
+            </div>
+          </div>
+        </footer>
       </main>
     </>
   );
