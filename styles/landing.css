@@ -456,8 +456,32 @@ body::after {
   color: #00f0ff;
   transform: translateY(-2px);
 }
-.tool-emoji { font-size: 1.8rem; opacity: 0.9; }
-.tool-name { font-size: 0.9rem; font-weight: 500; }
+.tool-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.tool-icon-emoji {
+  font-size: 1.6rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.tool-item:hover .tool-icon-wrapper {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.tool-name { 
+  font-size: 0.9rem; 
+  font-weight: 500; 
+  margin-left: 0.25rem;
+}
 
 /* --------------------------------------
    6. SECTIONS & CARDS
@@ -870,7 +894,7 @@ body::after {
 .footer-github {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+    gap: 0.5rem;
   padding: 0.4rem 1rem;
   border-radius: 100px;
   border: 1px solid var(--border-color);
@@ -888,10 +912,81 @@ body::after {
 -------------------------------------- */
 @media (max-width: 768px) {
   .nav-links { display: none; }
-  .hero { padding: 4rem 1rem; }
-  .stats-grid { flex-direction: column; align-items: center; gap: 1rem; }
+  .nav-container { padding: 0 1rem; height: 4rem; }
+  .nav-logo { width: 32px; height: 32px; }
+  .nav-brand-name { font-size: 1.2rem; }
+  
+  .hero { padding: 3rem 1rem; min-height: 80vh; }
+  .hero-title { font-size: clamp(2rem, 8vw, 3.5rem); }
+  .hero-subtitle { font-size: 1rem; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .btn { width: 100%; justify-content: center; }
+  
+  .stats-grid { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+  .stat-card { min-width: unset; padding: 1rem 1.5rem; }
+  .stat-value { font-size: 2rem; }
+  
   .floating-cards { display: none; }
-  .section { padding: 3rem 1rem; }
-  .preview-card { padding: 1.5rem; }
-  .footer-grid { gap: 1.5rem; }
+  
+  .section { padding: 2.5rem 1rem; }
+  .section-title { font-size: clamp(1.8rem, 5vw, 2.5rem); }
+  .section-subtitle { font-size: 1rem; }
+  
+  .opportunity-grid,
+  .features-grid,
+  .testimonials-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  
+  .step-card { min-width: 100%; }
+  
+  .preview-card { padding: 1.25rem; border-radius: 24px; }
+  .preview-metrics { grid-template-columns: 1fr; gap: 1rem; }
+  .metric-value { font-size: 1.5rem; }
+  
+  .tool-icons-grid { gap: 1.5rem; }
+  .tool-icon-wrapper { width: 44px; height: 44px; }
+  .tool-icon-emoji { font-size: 1.3rem; }
+  
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  
+  .final-cta { margin: 1rem 0.5rem; border-radius: 24px; padding: 2rem 1rem; }
+  .final-title { font-size: clamp(1.5rem, 5vw, 2rem); }
+  .final-subtitle { font-size: 0.95rem; }
+}
+
+@media (max-width: 480px) {
+  .hero-badge { font-size: 0.8rem; padding: 0.4rem 1rem; }
+  .stat-card { border-radius: 16px; }
+  .stat-value { font-size: 1.8rem; }
+  .stat-label { font-size: 0.6rem; }
+  
+  .opportunity-card,
+  .feature-card { padding: 1.5rem; border-radius: 20px; }
+  .opportunity-value { font-size: 2rem; }
+  
+  .step-number { width: 48px; height: 48px; font-size: 1.4rem; }
+  .step-content { padding: 1.5rem; border-radius: 16px; }
+  
+  .testimonial-card { padding: 1.5rem; }
+  .testimonial-quote { font-size: 2.5rem; }
+}
+
+/* Improve touch targets on mobile */
+@media (max-width: 768px) {
+  .btn, .nav-link, .footer-link, .preview-share-btn {
+    min-height: 44px;
+  }
+  
+  input, button {
+    min-height: 44px;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

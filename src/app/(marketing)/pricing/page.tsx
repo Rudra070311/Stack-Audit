@@ -1,6 +1,7 @@
 "use client";
 
-import { CheckCircle2, ArrowUpRight, Code, Zap } from "lucide-react";
+import Link from "next/link";
+import { CheckCircle2, ArrowUpRight, Code } from "lucide-react";
 
 export default function PricingPage() {
 	return (
@@ -15,14 +16,10 @@ export default function PricingPage() {
 						<span className="font-bold text-base text-zinc-50 tracking-tight">StackAudit</span>
 					</div>
 					<div className="hidden md:flex items-center gap-10">
-						<a href="/" className="text-sm font-medium text-zinc-400 hover:text-cyan-300 transition-all duration-300 relative group">
+						<Link href="/" className="text-sm font-medium text-zinc-400 hover:text-cyan-300 transition-all duration-300 relative group">
 							Home
 							<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
-						</a>
-						<a href="/features" className="text-sm font-medium text-zinc-400 hover:text-cyan-300 transition-all duration-300 relative group">
-							Features
-							<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
-						</a>
+						</Link>
 						<a href="/faq" className="text-sm font-medium text-zinc-400 hover:text-cyan-300 transition-all duration-300 relative group">
 							FAQ
 							<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
@@ -251,25 +248,25 @@ export default function PricingPage() {
 							<div>
 								<h4 className="text-sm font-bold text-zinc-50 mb-4 uppercase tracking-wider">Product</h4>
 								<ul className="space-y-3">
-									<li><a href="/" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Features</a></li>
-									<li><a href="/features" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Features</a></li>
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Documentation</a></li>
+									<li><Link href="/" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Home</Link></li>
+									<li><Link href="/features" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Features</Link></li>
+									<li><span className="text-sm text-zinc-400 font-medium">Documentation unavailable in this submission</span></li>
 								</ul>
 							</div>
 							<div>
 								<h4 className="text-sm font-bold text-zinc-50 mb-4 uppercase tracking-wider">Company</h4>
 								<ul className="space-y-3">
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Blog</a></li>
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Changelog</a></li>
+									<li><span className="text-sm text-zinc-400 font-medium">Blog unavailable in this submission</span></li>
+									<li><span className="text-sm text-zinc-400 font-medium">Changelog unavailable in this submission</span></li>
 									<li><a href="/faq" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">FAQ</a></li>
 								</ul>
 							</div>
 							<div>
 								<h4 className="text-sm font-bold text-zinc-50 mb-4 uppercase tracking-wider">Legal</h4>
 								<ul className="space-y-3">
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Privacy</a></li>
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Terms</a></li>
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Contact</a></li>
+									<li><span className="text-sm text-zinc-400 font-medium">Privacy handled externally</span></li>
+									<li><span className="text-sm text-zinc-400 font-medium">Terms handled externally</span></li>
+									<li><span className="text-sm text-zinc-400 font-medium">Contact via homepage footer</span></li>
 								</ul>
 							</div>
 						</div>

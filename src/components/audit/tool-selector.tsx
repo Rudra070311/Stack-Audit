@@ -28,7 +28,7 @@ export function ToolSelector({
       onChange={(e) =>
         onChange(e.target.value as ToolName)
       }
-      className="w-full rounded-xl border border-zinc-800 bg-zinc-950 p-3 text-white"
+      className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-base text-white transition-colors focus:border-cyan-500 focus:outline-none"
     >
       {tools.map((tool) => (
         <option key={tool} value={tool}>

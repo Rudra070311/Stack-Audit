@@ -6,74 +6,89 @@ Used by `/api/ai-summary` endpoint to generate personalized audit summaries usin
 
 ### Prompt Template
 
-```
-You are a financial advisor analyzing AI tool spending. Generate a precise 120-word personalized summary of audit results.
+hey, can u look on my project and ensure it does this. everything works and all. it should do allt his. ensure that pls
+What you’re building
+A free web app — call it whatever you want, naming is part of the test — that does this
+end-toend:
+1. A cold visitor lands on the page from a tweet, a blog post, or Hacker News
+2. They input what AI tools they pay for, what plan, monthly spend, team size, and
+primary use case
+3. They get an instant on-screen audit: where they’re overspending, what to switch
+to or downgrade, and total potential monthly + annual savings
+4. They get an option to capture the report (email gate) and — for high-savings
+cases — book a Credex consultation
+5. The result is shareable via a unique public URL with proper Open Graph
+previews
+No login required to use the tool. Email is captured after value is shown, never before.
+MVP features (all six required)
+1. Spend input form
+Support at minimum these tools as of submission week:
+Cursor (Hobby / Pro / Business / Enterprise)
+ GitHub Copilot (Individual / Business / Enterprise)
+ Claude (Free / Pro / Max / Team / Enterprise / API direct)
+ ChatGPT (Plus / Team / Enterprise / API direct)
+ Anthropic API direct
+ OpenAI API direct
+ Gemini (Pro / Ultra / API)
+ Windsurf or v0 — your pick of one more
+For each tool: which plan, current monthly spend, number of seats. Plus team size and
+primary use case (coding / writing / data / research / mixed). Form state must persist
+across page reloads.
+ CONFIDENTIAL
+2. Audit engine
+For each tool the user is on, the engine evaluates:
+ Are they on the right plan for their usage? (e.g., Team for 2 users is overkill)
+ Is there a cheaper plan from the same vendor that fits?
+ Is there a substantially cheaper alternative tool with similar capability for their use
+case?
+ Are they paying retail when they could get the same thing through credits?
+The logic must be defensible . A finance person should read your reasoning and agree.
+Not “Cursor bad, Claude Code good” — actual usage-fit reasoning with numbers.
+Pricing data must be current as of your submission week . Sources cited in
+PRICING_DATA.md — every number must trace back to an official pricing page URL.
+3. Audit results page
+ Per-tool breakdown: current spend → recommended action → savings + 1-
+sentence reason
+ Hero: total monthly savings + total annual savings, big and clear
+ For audits showing >$500/mo savings: surface Credex prominently as the way to
+capture more of that savings
+ For audits showing <$100/mo or already-optimal: be honest. “You’re spending
+well.” Don’t manufacture savings. Still capture the lead with a “notify me when
+new optimizations apply to your stack” signup
+Visual quality matters. This is the page that gets screenshotted and shared.
+4. AI-generated personalized summary
+Use the Anthropic API (preferred — apply for free credits if you don’t have access) or
+any LLM to generate a ~100-word personalized summary paragraph based on the audit.
+Must handle API failures gracefully (fallback to a templated summary). Your full prompt
+goes in PROMPTS.md .
+This is the one feature where you must use AI. For the audit math itself, hardcoded
+rules are correct — knowing when not to use AI is part of the test.
+ CONFIDENTIAL
+5. Lead capture + storage
+ Email capture with optional fields: company name, role, team size
+ Stored in a real backend: Supabase, Firebase, Cloudflare D1, your own Postgres
+on Render — your call
+ Sends a transactional email (Resend / Postmark / SES free tier) confirming the
+audit and noting Credex will reach out for high-savings cases
+ Basic abuse protection: rate limit, honeypot, or hCaptcha. Document your choice
+and why.
+6. Shareable result URL
+Each audit gets a unique public URL
+ Identifying details (company name, email) stripped from the public version. Tools
+and savings numbers shown.
+ Open Graph tags for clean link previews (Twitter card too)
+ This is the viral loop — design accordingly
+Bonus (only attempt after MVP works end-to-end)
+PDF export of the full report
+ Embeddable widget version ( <script> tag a blogger could drop in)
+ Benchmark mode: “your AI spend per developer is $X — companies your size
+average $Y”
+ Referral codes — share the tool, both parties get a perk
+ A short blog post or Twitter thread draft pitching the tool, written as if you were
+launching it. 
+w are using deepseek for audit gen. see .env.local. ok. pls work and make this project the best. ensure every component is linked and no file is of waste
 
-Company: {companyName}
-Team Size: {teamSize} developers ({costPerDev}/dev/month)
-Primary Use: {useCase}
-Current Spend: ${currentMonthlySpend}/month (${annualSpend}/year)
-Recommended: ${optimizedSpend}/month
-Monthly Savings: ${monthlySavings} | Annual: ${annualSavings}
 
-Tools:
-{toolsList}
+### Reason
 
-Format summary with: (1) Current cost analysis with per-developer breakdown, (2) Biggest savings opportunity with specific plan changes, (3) Implementation impact and annual ROI. Use numbers throughout. Be direct, actionable, encouraging. Avoid generic platitudes.
-```
-
-### Parameters
-
-- `{companyName}`: Optional company name from lead form (defaults to "Unknown")
-- `{teamSize}`: Number of developers on the team
-- `{useCase}`: Primary use case (coding, writing, data, research, or mixed)
-- `{currentMonthlySpend}`: Total current monthly AI tool spend in USD
-- `{optimizedSpend}`: Recommended total monthly spend after optimization
-- `{monthlySavings}`: Potential monthly savings (currentSpend - optimizedSpend)
-- `{annualSavings}`: Potential annual savings (monthlySavings * 12)
-- `{toolsList}`: Formatted list of current tools with costs
-
-### Example Output
-
-```
-Your team of 8 developers is spending $240/month on AI tools, averaging $30 per developer. By consolidating to per-seat team plans where economical, you could reduce spend to $160/month—a $960 annual savings. Your biggest opportunity is Claude, where switching from individual Pro ($20) to Team plans ($25/seat for 2+ users) is actually slightly more expensive at 8 people, but you could save by using Claude's free tier for code review tasks and Pro only for complex reasoning. Consider this workflow adjustment alongside your team's actual usage patterns.
-```
-
-### Prompt Philosophy
-
-- **Specific**: Include actual dollar amounts from the audit
-- **Actionable**: Provide specific tools or plans to switch to
-- **Contextual**: Reference the team size and use case
-- **Honest**: Don't oversell savings or make false claims
-- **Encouraging**: Help the user see the value in optimization
-
-### Model Used
-
-- **Primary**: Claude 3.5 Sonnet (`claude-3-5-sonnet-20241022`)
-- **Fallback**: Templated summary (hardcoded) if Anthropic API unavailable
-
-### Error Handling
-
-If the Anthropic API call fails or returns an error:
-1. The endpoint catches the error
-2. Falls back to a hardcoded summary template
-3. Returns `isTemplate: true` in response
-4. The frontend treats templated summaries the same as AI-generated ones
-
-### Template Fallback Logic
-
-When API is unavailable, the fallback generates a summary that includes:
-- Total team size and cost per developer
-- Potential annual savings percentage (if savings exist)
-- Identification of the largest optimization opportunity by tool
-- Guidance to review the detailed per-tool breakdown
-
-See `/src/app/api/ai-summary/route.ts` for implementation.
-
-## Future Prompts
-
-As the application expands, additional AI prompts may be added for:
-- PDF report generation
-- Executive summary creation
-- Custom recommendation letters
-- Benchmark comparisons
+I used them so, just to ensure that all is present and this helps detect things that might be missed by human eyes or what I must have not seen/caught.

@@ -8,6 +8,11 @@ import "../../styles/audit-page.css";
 export const metadata: Metadata = {
 	title: "Stack Audit",
 	description: "Audit AI coding stack spend and savings.",
+	icons: {
+		icon: "/favicon.svg",
+		shortcut: "/favicon.svg",
+		apple: "/favicon.svg",
+	},
 };
 
 export default function RootLayout({

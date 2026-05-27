@@ -56,3 +56,11 @@ Update- Copilot just fixed the API. AI responses getting now.
 **What I learned:** I learned how I need to prompt my AI tools better for better results. Use of words like "you are helping in for the best app in the world", etc help in a better response. Also I learnt how using API is better in such apps and AI help is really important for a solo dev.
 **Blockers / what I'm stuck on:** I don't feel lost or anything but just under the pressure of time.
 **Plan for tomorrow:**  My school is half day tomorrow so I plan to get a bigger session into the final hous and submit the project tomorrow.
+
+### Day 7 — 2026-05-27
+
+**Hours worked:** 5hrs
+**What I did:** I did polishing today majorly. CSS dne. tests done. Its complete. I deployed it on stack-audit.vercel.app
+**What I learned:** I learned how I need better time management to make it more sucessful.
+**Blockers / what I'm stuck on:** I don't feel lost or anything but just under the pressure of time.
+**Plan for tomorrow:**

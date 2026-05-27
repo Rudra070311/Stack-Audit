@@ -180,7 +180,7 @@ export function runAudit(formData: AuditFormData): AuditResult {
     totalOptimizedSpend += audit.optimizedSpend;
   }
 
-  const totalMonthlySavings = totalCurrentSpend - totalOptimizedSpend;
+  const totalMonthlySavings = Math.max(0, totalCurrentSpend - totalOptimizedSpend);
   const totalAnnualSavings = totalMonthlySavings * 12;
   const savingsPercentage =
     totalCurrentSpend > 0 ? (totalMonthlySavings / totalCurrentSpend) * 100 : 0;

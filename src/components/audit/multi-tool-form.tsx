@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Plus, Trash2, Save } from "lucide-react";
 import type { ToolConfig, ToolName, UseCase } from "@/types/audit";
 import { PRICING_CONFIG } from "@/lib/pricing-config";
@@ -24,44 +24,76 @@ const TOOLS: ToolName[] = [
 const USE_CASES: UseCase[] = ["coding", "writing", "data", "research", "mixed"];
 
 export function MultiToolForm({ onSubmit, isLoading = false }: MultiToolFormProps) {
-  const [tools, setTools] = useState<ToolConfig[]>([
-    { name: "Cursor", plan: "Pro", monthlySpend: 20, seats: 1 },
-  ]);
-
-  const [teamSize, setTeamSize] = useState(5);
-  const [useCase, setUseCase] = useState<UseCase>("mixed");
-  const [showSaved, setShowSaved] = useState(false);
-
-  // Load persisted form data from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem("stackaudit_form_state");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (parsed.tools && parsed.tools.length > 0) {
-          setTools(parsed.tools);
-          setTeamSize(parsed.teamSize || 5);
-          setUseCase(parsed.useCase || "mixed");
-        }
-      } catch (error) {
-        console.error("Failed to load saved form state:", error);
-      }
+  const [tools, setTools] = useState<ToolConfig[]>(() => {
+    if (typeof window === "undefined") {
+      return [{ name: "Cursor", plan: "Pro", monthlySpend: 20, seats: 1 }];
     }
-  }, []);
+
+    const saved = localStorage.getItem("stackaudit_form_state");
+    if (!saved) {
+      return [{ name: "Cursor", plan: "Pro", monthlySpend: 20, seats: 1 }];
+    }
+
+    try {
+      const parsed = JSON.parse(saved) as { tools?: ToolConfig[] };
+      return parsed.tools && parsed.tools.length > 0
+        ? parsed.tools
+        : [{ name: "Cursor", plan: "Pro", monthlySpend: 20, seats: 1 }];
+    } catch (error) {
+      console.error("Failed to load saved form state:", error);
+      return [{ name: "Cursor", plan: "Pro", monthlySpend: 20, seats: 1 }];
+    }
+  });
+
+  const [teamSize, setTeamSize] = useState(() => {
+    if (typeof window === "undefined") {
+      return 5;
+    }
+
+    const saved = localStorage.getItem("stackaudit_form_state");
+    if (!saved) {
+      return 5;
+    }
+
+    try {
+      const parsed = JSON.parse(saved) as { teamSize?: number };
+      return parsed.teamSize || 5;
+    } catch {
+      return 5;
+    }
+  });
+
+  const [useCase, setUseCase] = useState<UseCase>(() => {
+    if (typeof window === "undefined") {
+      return "mixed";
+    }
+
+    const saved = localStorage.getItem("stackaudit_form_state");
+    if (!saved) {
+      return "mixed";
+    }
+
+    try {
+      const parsed = JSON.parse(saved) as { useCase?: UseCase };
+      return parsed.useCase || "mixed";
+    } catch {
+      return "mixed";
+    }
+  });
 
   // Save form state to localStorage whenever it changes
-  const saveFormState = () => {
+  const saveFormState = useCallback(() => {
     const formState = { tools, teamSize, useCase };
     localStorage.setItem("stackaudit_form_state", JSON.stringify(formState));
-    setShowSaved(true);
-    setTimeout(() => setShowSaved(false), 2000);
-  };
+  }, [tools, teamSize, useCase]);
 
   useEffect(() => {
     // Auto-save every 5 seconds
-    const interval = setInterval(saveFormState, 5000);
+    const interval = setInterval(() => {
+      saveFormState();
+    }, 5000);
     return () => clearInterval(interval);
-  }, [tools, teamSize, useCase]);
+  }, [saveFormState]);
 
   const addTool = () => {
     const newTool: ToolConfig = {
@@ -70,11 +102,11 @@ export function MultiToolForm({ onSubmit, isLoading = false }: MultiToolFormProp
       monthlySpend: 20,
       seats: 1,
     };
-    setTools([...tools, newTool]);
+    setTools((currentTools) => [...currentTools, newTool]);
   };
 
   const removeTool = (index: number) => {
-    setTools(tools.filter((_, i) => i !== index));
+    setTools((currentTools) => currentTools.filter((_, i) => i !== index));
   };
 
   const updateTool = <K extends keyof ToolConfig>(
@@ -82,9 +114,11 @@ export function MultiToolForm({ onSubmit, isLoading = false }: MultiToolFormProp
     field: K,
     value: ToolConfig[K]
   ) => {
-    const updated = [...tools];
-    updated[index] = { ...updated[index], [field]: value };
-    setTools(updated);
+    setTools((currentTools) => {
+      const updated = [...currentTools];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -204,11 +238,6 @@ export function MultiToolForm({ onSubmit, isLoading = false }: MultiToolFormProp
         </button>
       </div>
 
-      {showSaved && (
-        <div className="rounded-xl border border-emerald-500/50 bg-emerald-950/30 px-4 py-3 text-sm text-emerald-300">
-          ✓ Form saved to local storage
-        </div>
-      )}
     </form>
   );
 }

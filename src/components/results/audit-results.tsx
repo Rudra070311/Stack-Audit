@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Copy, Download, Share2, TrendingDown, AlertCircle, CheckCircle2, Mail } from "lucide-react";
+import { useState } from "react";
+import { Copy, Share2, TrendingDown, CheckCircle2, Mail } from "lucide-react";
 import type { AuditResult, PerToolAudit } from "@/types/audit";
 import { formatCurrency, classifySavingsLevel } from "@/lib/audit-engine";
 
@@ -9,28 +9,26 @@ interface AuditResultsProps {
   audit: AuditResult;
   summary?: string;
   auditId: string;
+  shareUrl?: string;
 }
 
-export function AuditResults({ audit, summary, auditId }: AuditResultsProps) {
+export function AuditResults({ audit, summary, auditId, shareUrl }: AuditResultsProps) {
   const [copied, setCopied] = useState(false);
-  const [shareUrl, setShareUrl] = useState("");
   const [email, setEmail] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [role, setRole] = useState("");
   const [leadSubmitted, setLeadSubmitted] = useState(false);
   const [leadLoading, setLeadLoading] = useState(false);
 
-  useEffect(() => {
-    // Create shareable URL
-    const url = `${window.location.origin}/results/${auditId}`;
-    setShareUrl(url);
-  }, [auditId]);
-
   const savingsLevel = classifySavingsLevel(audit.totalAnnualSavings);
-  const shareableLink = `${typeof window !== "undefined" ? window.location.origin : ""}/results/${auditId}`;
+  const shareableLink = shareUrl || `/results/${auditId}`;
+  const clipboardLink =
+    shareableLink.startsWith("http") || typeof window === "undefined"
+      ? shareableLink
+      : `${window.location.origin}${shareableLink}`;
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(shareableLink);
+    navigator.clipboard.writeText(clipboardLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -63,193 +61,192 @@ export function AuditResults({ audit, summary, auditId }: AuditResultsProps) {
   };
 
   return (
-    <div className="mx-auto max-w-5xl space-y-10">
-      {/* Hero Section - Total Savings */}
-      <div className="rounded-[2rem] border border-cyan-500/30 bg-gradient-to-br from-cyan-950/40 to-blue-950/40 p-8 shadow-[0_30px_90px_rgba(0,0,0,0.3)] md:p-12 lg:p-14">
-        <div className="mb-8 flex flex-col items-center gap-3 text-center md:flex-row md:justify-center md:text-left">
-          <TrendingDown className="h-8 w-8 text-cyan-400" />
-          <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">Audit Results</h2>
+    <div className="mx-auto w-full max-w-7xl space-y-8">
+      <div className="grid gap-8 xl:grid-cols-[1.15fr_0.85fr] xl:items-start">
+        <div className="rounded-[2rem] border border-cyan-500/30 bg-gradient-to-br from-cyan-950/40 to-blue-950/40 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.3)] sm:p-8 lg:p-10">
+          <div className="mb-8 flex flex-col items-center gap-3 text-center md:flex-row md:justify-center md:text-left">
+            <TrendingDown className="h-8 w-8 text-cyan-400" />
+            <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">Audit Results</h2>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="rounded-2xl bg-zinc-950/30 px-4 py-5 text-center">
+              <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">Monthly Savings</p>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-cyan-400 sm:text-4xl">
+                {formatCurrency(audit.totalMonthlySavings)}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-zinc-950/30 px-4 py-5 text-center">
+              <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">Annual Savings</p>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-green-400 sm:text-4xl">
+                {formatCurrency(audit.totalAnnualSavings)}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-zinc-950/30 px-4 py-5 text-center">
+              <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">Current Spend</p>
+              <p className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                {formatCurrency(audit.totalCurrentSpend)}
+                <span className="text-xs text-zinc-400">/mo</span>
+              </p>
+            </div>
+            <div className="rounded-2xl bg-zinc-950/30 px-4 py-5 text-center">
+              <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">Optimization Potential</p>
+              <p className="mt-2 text-2xl font-semibold tracking-tight text-blue-400 sm:text-3xl">
+                {audit.savingsPercentage.toFixed(1)}%
+              </p>
+            </div>
+          </div>
+
+          {savingsLevel === "high" && (
+            <div className="mt-6 rounded-lg border border-emerald-500/30 bg-emerald-950/30 px-4 py-3">
+              <p className="text-sm text-emerald-300">
+                🚀 <strong>High savings opportunity detected!</strong> Consider using Credex to
+                capture more of these savings through automated optimization and credit management.
+              </p>
+            </div>
+          )}
+
+          {savingsLevel === "low" && (
+            <div className="mt-6 rounded-lg border border-blue-500/30 bg-blue-950/30 px-4 py-3">
+              <p className="text-sm text-blue-300">
+                ✓ Your spending appears well-optimized. We&apos;ll notify you when new optimization
+                opportunities become available for your stack.
+              </p>
+            </div>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 gap-6 text-center sm:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-2xl bg-zinc-950/30 px-4 py-5">
-            <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">Monthly Savings</p>
-            <p className="mt-2 text-4xl font-bold tracking-tight text-cyan-400">
-              {formatCurrency(audit.totalMonthlySavings)}
-            </p>
-          </div>
-          <div className="rounded-2xl bg-zinc-950/30 px-4 py-5">
-            <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">Annual Savings</p>
-            <p className="mt-2 text-4xl font-bold tracking-tight text-green-400">
-              {formatCurrency(audit.totalAnnualSavings)}
-            </p>
-          </div>
-          <div className="rounded-2xl bg-zinc-950/30 px-4 py-5">
-            <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">Current Spend</p>
-            <p className="mt-2 text-3xl font-semibold tracking-tight text-white">
-              {formatCurrency(audit.totalCurrentSpend)}
-              <span className="text-xs text-zinc-400">/mo</span>
-            </p>
-          </div>
-          <div className="rounded-2xl bg-zinc-950/30 px-4 py-5">
-            <p className="text-xs uppercase tracking-[0.18em] text-zinc-400">Optimization Potential</p>
-            <p className="mt-2 text-3xl font-semibold tracking-tight text-blue-400">
-              {audit.savingsPercentage.toFixed(1)}%
-            </p>
-          </div>
+        <div className="space-y-6">
+          {summary && (
+            <div className="rounded-[1.75rem] border border-purple-500/30 bg-gradient-to-br from-purple-950/30 to-pink-950/20 p-6 sm:p-7">
+              <h3 className="mb-4 flex items-center justify-center gap-2 text-center text-xl font-semibold text-white sm:text-2xl">
+                📋 Personalized Summary
+              </h3>
+              <p className="mx-auto max-w-3xl text-center text-sm leading-7 text-zinc-200 sm:text-base">
+                {summary}
+              </p>
+            </div>
+          )}
+
+          {!leadSubmitted ? (
+            <div className="rounded-[1.75rem] border border-purple-500/30 bg-gradient-to-br from-purple-950/30 to-pink-950/20 p-6 sm:p-7">
+              <h3 className="mb-4 flex items-center justify-center gap-2 text-center text-xl font-semibold text-white sm:text-2xl">
+                <Mail size={20} />
+                Get Full Report via Email
+              </h3>
+              <p className="mb-5 text-center text-sm text-zinc-300 sm:text-base">
+                Receive a detailed report with all findings and recommendations. We&apos;ll also notify
+                you when new optimization opportunities arise.
+              </p>
+              <form onSubmit={handleLeadSubmit} className="grid gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@company.com"
+                    required
+                    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-white focus:border-purple-500 focus:outline-none"
+                  />
+                  <input
+                    type="text"
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    placeholder="Company name (optional)"
+                    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-white focus:border-purple-500 focus:outline-none"
+                  />
+                </div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto]">
+                  <input
+                    type="text"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    placeholder="Your role (optional)"
+                    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-white focus:border-purple-500 focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    disabled={leadLoading || !email}
+                    className="rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 font-medium text-white transition-all hover:shadow-lg disabled:opacity-50"
+                  >
+                    {leadLoading ? "Sending..." : "Get Report"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          ) : (
+            <div className="rounded-[1.75rem] border border-green-500/30 bg-gradient-to-br from-green-950/30 to-emerald-950/20 p-6 text-center sm:p-7">
+              <CheckCircle2 className="mx-auto mb-3 h-12 w-12 text-green-400" />
+              <h3 className="text-xl font-semibold text-white">Report Sent!</h3>
+              <p className="mt-2 text-sm text-zinc-300">
+                Check your inbox at {email} for the full audit report.
+              </p>
+            </div>
+          )}
+
+          {savingsLevel === "high" && (
+            <div className="rounded-[1.75rem] border border-blue-500/30 bg-gradient-to-br from-blue-950/30 to-cyan-950/20 p-6 sm:p-7">
+              <h3 className="mb-4 flex items-center justify-center gap-2 text-center text-xl font-semibold text-white sm:text-2xl">
+                <Share2 size={20} />
+                Share Your Audit Results
+              </h3>
+
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <input
+                  type="text"
+                  value={shareableLink}
+                  readOnly
+                  className="flex-1 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-200 sm:text-base"
+                />
+                <button
+                  onClick={copyToClipboard}
+                  className="flex items-center justify-center gap-2 rounded-xl bg-cyan-600 px-5 py-3.5 font-medium text-white transition-all hover:bg-cyan-700"
+                >
+                  <Copy size={18} />
+                  {copied ? "Copied!" : "Copy"}
+                </button>
+              </div>
+
+              <p className="mt-4 text-center text-sm text-zinc-400 sm:text-base">
+                This link shows your audit results (sensitive data removed). Share it with your
+                team or use it for reference.
+              </p>
+            </div>
+          )}
+
+          {savingsLevel === "high" && (
+            <div className="rounded-[1.75rem] border border-green-500/30 bg-gradient-to-br from-green-950/30 to-emerald-950/20 p-6 text-center sm:p-7">
+              <h3 className="mb-3 text-xl font-semibold text-white sm:text-2xl">
+                Ready to Capture These Savings?
+              </h3>
+              <p className="mx-auto mb-5 max-w-2xl text-sm text-zinc-300 sm:text-base">
+                Use Credex to automate plan optimization and manage credits across your entire AI
+                tool stack.
+              </p>
+              <a
+                href="https://credex.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full bg-green-600 px-7 py-3.5 font-medium text-white transition-all hover:bg-green-700 hover:shadow-lg hover:shadow-green-500/30"
+              >
+                Learn About Credex →
+              </a>
+            </div>
+          )}
         </div>
-
-        {/* Savings Level Message */}
-        {savingsLevel === "high" && (
-          <div className="mt-6 rounded-lg border border-emerald-500/30 bg-emerald-950/30 px-4 py-3">
-            <p className="text-sm text-emerald-300">
-              🚀 <strong>High savings opportunity detected!</strong> Consider using Credex to
-              capture more of these savings through automated optimization and credit management.
-            </p>
-          </div>
-        )}
-
-        {savingsLevel === "low" && (
-          <div className="mt-6 rounded-lg border border-blue-500/30 bg-blue-950/30 px-4 py-3">
-            <p className="text-sm text-blue-300">
-              ✓ Your spending appears well-optimized. We'll notify you when new optimization
-              opportunities become available for your stack.
-            </p>
-          </div>
-        )}
       </div>
 
-      {/* Per-Tool Breakdown */}
       <div className="space-y-5">
         <h3 className="text-center text-3xl font-bold tracking-tight text-white sm:text-4xl">
           Per-Tool Breakdown
         </h3>
 
-        {audit.tools.map((tool) => (
-          <ToolAuditCard key={tool.tool} tool={tool} />
-        ))}
+        <div className="grid gap-5 xl:grid-cols-2">
+          {audit.tools.map((tool) => (
+            <ToolAuditCard key={tool.tool} tool={tool} />
+          ))}
+        </div>
       </div>
-
-      {/* AI Summary */}
-      {summary && (
-        <div className="rounded-[1.75rem] border border-purple-500/30 bg-gradient-to-br from-purple-950/30 to-pink-950/20 p-6 sm:p-8">
-          <h3 className="mb-4 flex items-center justify-center gap-2 text-center text-xl font-semibold text-white sm:text-2xl">
-            📋 Personalized Summary
-          </h3>
-          <p className="mx-auto max-w-3xl text-center text-base leading-8 text-zinc-200 sm:text-lg">
-            {summary}
-          </p>
-        </div>
-      )}
-
-      {/* Lead Capture - Email Gate */}
-      {!leadSubmitted ? (
-        <div className="rounded-[1.75rem] border border-purple-500/30 bg-gradient-to-br from-purple-950/30 to-pink-950/20 p-6 sm:p-8">
-          <h3 className="mb-4 flex items-center justify-center gap-2 text-center text-xl font-semibold text-white sm:text-2xl">
-            <Mail size={20} />
-            Get Full Report via Email
-          </h3>
-          <p className="mb-5 text-center text-sm text-zinc-300 sm:text-base">
-            Receive a detailed report with all findings and recommendations.
-            We'll also notify you when new optimization opportunities arise.
-          </p>
-          <form onSubmit={handleLeadSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@company.com"
-                required
-                className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-white focus:border-purple-500 focus:outline-none"
-              />
-              <input
-                type="text"
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="Company name (optional)"
-                className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-white focus:border-purple-500 focus:outline-none"
-              />
-            </div>
-            <div className="flex gap-3">
-              <input
-                type="text"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                placeholder="Your role (optional)"
-                className="flex-1 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-white focus:border-purple-500 focus:outline-none"
-              />
-              <button
-                type="submit"
-                disabled={leadLoading || !email}
-                className="rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 font-medium text-white transition-all hover:shadow-lg disabled:opacity-50"
-              >
-                {leadLoading ? "Sending..." : "Get Report"}
-              </button>
-            </div>
-          </form>
-        </div>
-      ) : (
-        <div className="rounded-[1.75rem] border border-green-500/30 bg-gradient-to-br from-green-950/30 to-emerald-950/20 p-6 text-center sm:p-8">
-          <CheckCircle2 className="mx-auto mb-3 h-12 w-12 text-green-400" />
-          <h3 className="text-xl font-semibold text-white">Report Sent!</h3>
-          <p className="mt-2 text-sm text-zinc-300">
-            Check your inbox at {email} for the full audit report.
-          </p>
-        </div>
-      )}
-
-      {/* Shareable Link Section */}
-      {savingsLevel === "high" && (
-        <div className="rounded-[1.75rem] border border-blue-500/30 bg-gradient-to-br from-blue-950/30 to-cyan-950/20 p-6 sm:p-8">
-          <h3 className="mb-4 flex items-center justify-center gap-2 text-center text-xl font-semibold text-white sm:text-2xl">
-            <Share2 size={20} />
-            Share Your Audit Results
-          </h3>
-
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <input
-              type="text"
-              value={shareableLink}
-              readOnly
-              className="flex-1 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm text-zinc-200 sm:text-base"
-            />
-            <button
-              onClick={copyToClipboard}
-              className="flex items-center justify-center gap-2 rounded-xl bg-cyan-600 px-5 py-3.5 font-medium text-white transition-all hover:bg-cyan-700"
-            >
-              <Copy size={18} />
-              {copied ? "Copied!" : "Copy"}
-            </button>
-          </div>
-
-          <p className="mt-4 text-center text-sm text-zinc-400 sm:text-base">
-            This link shows your audit results (sensitive data removed). Share it with your team
-            or use it for reference.
-          </p>
-        </div>
-      )}
-
-      {/* Credex CTA for High Savings */}
-      {savingsLevel === "high" && (
-        <div className="rounded-[1.75rem] border border-green-500/30 bg-gradient-to-br from-green-950/30 to-emerald-950/20 p-6 text-center sm:p-8">
-          <h3 className="mb-3 text-xl font-semibold text-white sm:text-2xl">
-            Ready to Capture These Savings?
-          </h3>
-          <p className="mx-auto mb-5 max-w-2xl text-sm text-zinc-300 sm:text-base">
-            Use Credex to automate plan optimization and manage credits across your entire AI tool
-            stack.
-          </p>
-          <a
-            href="https://credex.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-full bg-green-600 px-7 py-3.5 font-medium text-white transition-all hover:bg-green-700 hover:shadow-lg hover:shadow-green-500/30"
-          >
-            Learn About Credex →
-          </a>
-        </div>
-      )}
     </div>
   );
 }

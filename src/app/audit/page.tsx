@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { BrandLogo } from "@/components/brand-logo";
 import { MultiToolForm } from "@/components/audit/multi-tool-form";
 import { AuditResults } from "@/components/results/audit-results";
 import type { AuditFormData, AuditResult } from "@/types/audit";
@@ -12,6 +14,7 @@ export default function AuditPage() {
   const [audit, setAudit] = useState<AuditResult | null>(null);
   const [summary, setSummary] = useState("");
   const [auditId, setAuditId] = useState("");
+  const [shareUrl, setShareUrl] = useState("");
 
   async function handleSubmit(
     tools: AuditFormData["tools"],
@@ -21,6 +24,7 @@ export default function AuditPage() {
     setError("");
     setAudit(null);
     setSummary("");
+    setShareUrl("");
     setLoading(true);
 
     try {
@@ -48,7 +52,7 @@ export default function AuditPage() {
 
       // Store audit for sharing
       try {
-        await fetch("/api/share", {
+        const shareResponse = await fetch("/api/share", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -57,6 +61,10 @@ export default function AuditPage() {
             audit: auditData.audit,
           }),
         });
+        const shareData = await shareResponse.json();
+        if (shareData.success) {
+          setShareUrl(shareData.payloadUrl || shareData.shareUrl || "");
+        }
       } catch (shareError) {
         console.error("Failed to store audit for sharing:", shareError);
       }
@@ -101,41 +109,26 @@ export default function AuditPage() {
       <nav className="sticky top-0 z-40 border-b border-zinc-800/20 bg-zinc-950/70 backdrop-blur-2xl">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-500 via-cyan-400 to-blue-400 shadow-[0_0_24px_rgba(34,211,238,0.25)]" />
-              <span className="text-xl font-bold tracking-tight gradient-text">StackAudit</span>
-            </div>
+            <BrandLogo href="/" showLabel={false} />
             <div className="hidden items-center gap-2 rounded-full border border-zinc-800/60 bg-zinc-900/50 px-2 py-2 text-[0.9rem] backdrop-blur-xl sm:flex">
-              <a
+              <Link
                 href="/"
                 className="rounded-full px-4 py-2 text-zinc-400 transition-colors hover:bg-zinc-800/70 hover:text-cyan-300"
               >
                 Home
-              </a>
-              <a href="/audit" className="rounded-full bg-cyan-500/10 px-4 py-2 font-medium text-cyan-300">
+              </Link>
+              <Link href="/audit" className="rounded-full bg-cyan-500/10 px-4 py-2 font-medium text-cyan-300">
                 Audit
-              </a>
-              <a
-                href="/features"
-                className="rounded-full px-4 py-2 text-zinc-400 transition-colors hover:bg-zinc-800/70 hover:text-cyan-300"
-              >
-                Features
-              </a>
-              <a
-                href="/pricing"
-                className="rounded-full px-4 py-2 text-zinc-400 transition-colors hover:bg-zinc-800/70 hover:text-cyan-300"
-              >
-                Pricing
-              </a>
+              </Link>
             </div>
           </div>
         </div>
       </nav>
 
-      <main className="min-h-screen bg-zinc-950">
-        <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+      <main className="audit-container min-h-screen">
+        <div className="audit-content-wrapper">
           {/* Header */}
-          <div className="mx-auto mb-14 max-w-3xl space-y-5 text-center">
+          <div className="audit-intro mx-auto max-w-3xl space-y-5 text-center">
             <h1 className="text-5xl font-bold tracking-tight gradient-text sm:text-6xl">
               AI Tool Spend Audit
             </h1>
@@ -147,7 +140,7 @@ export default function AuditPage() {
 
           {/* Form or Results */}
           {!audit ? (
-            <div className="rounded-[2rem] border border-zinc-800/60 bg-gradient-to-br from-zinc-900/60 to-zinc-800/30 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.35)] sm:p-8 lg:p-10">
+            <div className="audit-form-container">
               <MultiToolForm onSubmit={handleSubmit} isLoading={loading} />
 
               {error && (
@@ -157,7 +150,7 @@ export default function AuditPage() {
               )}
             </div>
           ) : (
-            <AuditResults audit={audit} summary={summary} auditId={auditId} />
+            <AuditResults audit={audit} summary={summary} auditId={auditId} shareUrl={shareUrl} />
           )}
 
           {/* Show form edit button when results are displayed */}

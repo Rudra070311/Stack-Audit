@@ -1,21 +1,22 @@
 "use client";
-import "../../public/New/windsurf.svg";
 import Link from "next/link";
 import {
+  Code2,
   ChevronRight,
+  Bot,
+  Diamond,
   Zap,
+  Sparkles,
+  Waves,
   TrendingDown,
   Share2,
-  Sparkles,
   BarChart3,
   ArrowUpRight,
-  Code,
   Shield,
-  Clock,
-  DollarSign,
   CheckCircle,
 } from "lucide-react";
 
+import { BrandLogo } from "@/components/brand-logo";
 import "../../styles/landing.css";
 
 export default function MainPage() {
@@ -24,13 +25,11 @@ export default function MainPage() {
       <nav className="nav">
         <div className="nav-container">
           <div className="nav-brand">
-            <div className="nav-logo"><img src="./public/new/stackaudit-logo.svg" alt="StackAudit" /></div>
-            <span className="nav-brand-name">StackAudit</span>
+            <BrandLogo href="/" showLabel={false} className="nav-brand-link" />
           </div>
           <div className="nav-links">
             <a href="#features" className="nav-link">Features</a>
             <a href="#how-it-works" className="nav-link">How It Works</a>
-            <a href="#" className="nav-link">Pricing</a>
           </div>
         </div>
       </nav>
@@ -62,10 +61,10 @@ export default function MainPage() {
                 Run Free Audit
                 <ArrowUpRight size={20} />
               </Link>
-              <button className="btn btn-secondary">
+              <Link href="#example" className="btn btn-secondary">
                 See Example Report
                 <ChevronRight size={20} />
-              </button>
+              </Link>
             </div>
 
             <div className="stats-grid">
@@ -108,17 +107,18 @@ export default function MainPage() {
               <div className="tool-icons-label">Supports your entire stack</div>
               <div className="tool-icons-grid">
                 {[
-                  { name: "Cursor", image: "../../public/new/cursor.svg" },
-                  { name: "Claude", image: "../../public/new/claude.svg" },
-                  { name: "OpenAI", image: "../../public/new/openai.svg" },
-                  { name: "Gemini", image: "../../public/new/gemini.svg" },
-                  { name: "Copilot", image: "../../public/new/copilot.svg" },
-                  { name: "Windsurf", image: "../../public/New/windsurf.svg" },
+                  { name: "Cursor", icon: Code2, color: "from-blue-500 to-cyan-500" },
+                  { name: "Claude", icon: Sparkles, color: "from-orange-500 to-amber-500" },
+                  { name: "OpenAI", icon: Bot, color: "from-green-500 to-emerald-500" },
+                  { name: "Gemini", icon: Diamond, color: "from-blue-600 to-purple-600" },
+                  { name: "Copilot", icon: Shield, color: "from-gray-600 to-gray-800" },
+                  { name: "Windsurf", icon: Waves, color: "from-cyan-500 to-blue-600" },
                 ].map((tool) => (
                   <div key={tool.name} className="tool-item">
-                    <img src={tool.image} alt={tool.name} className="tool-image" />
+                    <div className={`tool-icon-wrapper bg-gradient-to-br ${tool.color}`}>
+                      <tool.icon size={24} className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.35)]" />
+                    </div>
                     <span className="tool-name">{tool.name}</span>
-                    <img src="../../public/New/windsurf.svg" alt="Supported" className="tool-check" />
                   </div>
                 ))}
               </div>
@@ -214,7 +214,7 @@ export default function MainPage() {
         </section>
 
         {/* Live Preview */}
-        <section className="section">
+        <section className="section" id="example">
           <div className="section-inner">
             <div className="text-center">
               <h2 className="section-title">See your savings in real-time</h2>
@@ -322,42 +322,44 @@ export default function MainPage() {
         <footer className="footer">
           <div className="footer-inner">
             <div className="footer-grid">
-              <div>
-                <div className="footer-brand">
-                  <div className="footer-logo"><img src="./public/new/stackaudit-logo.svg" alt="StackAudit" /></div>
-                  <span style={{ fontWeight: 600, color: "#fff" }}>StackAudit</span>
-                </div>
+                <div>
+                  <div className="footer-brand">
+                    <BrandLogo href="/" showLabel={false} />
+                    <span style={{ fontWeight: 600, color: "#fff" }}>StackAudit</span>
+                  </div>
                 <p className="footer-tagline">Instant AI spend audits for engineering teams.</p>
               </div>
               <div>
                 <h4 className="footer-heading">Product</h4>
                 <ul className="footer-links">
                   <li><a href="#features" className="footer-link">Features</a></li>
-                  <li><a href="#" className="footer-link">Pricing</a></li>
-                  <li><a href="#" className="footer-link">Documentation</a></li>
+                  <li><a href="/audit" className="footer-link">Run Audit</a></li>
                 </ul>
               </div>
               <div>
                 <h4 className="footer-heading">Company</h4>
                 <ul className="footer-links">
-                  <li><a href="#" className="footer-link">Blog</a></li>
-                  <li><a href="#" className="footer-link">Changelog</a></li>
-                  <li><a href="#" className="footer-link">Status</a></li>
+                  <li><a href="mailto:rudra070311@gmail.com" className="footer-link">Contact</a></li>
+                  <li><a href="https://github.com/Rudra070311/Stack-Audit" className="footer-link">GitHub</a></li>
+                  <li><Link href="#example" className="footer-link">Example Report</Link></li>
                 </ul>
               </div>
               <div>
                 <h4 className="footer-heading">Legal</h4>
                 <ul className="footer-links">
-                  <li><a href="#" className="footer-link">Privacy</a></li>
-                  <li><a href="#" className="footer-link">Terms</a></li>
-                  <li><a href="#" className="footer-link">Contact</a></li>
+                  <li><span className="footer-link">Private by design</span></li>
+                  <li><span className="footer-link">Built for submission</span></li>
+                  <li><span className="footer-link">No hidden pricing page</span></li>
                 </ul>
               </div>
             </div>
             <div className="footer-bottom">
-              <span>© 2026 StackAudit. Built with Next.js, Claude & ❤️.</span>
+              <span>© 2026 StackAudit. Built with Next.js & ❤️.</span>
               <a href="https://github.com/Rudra070311/Stack-Audit" className="footer-github">
-                <Code size={16} /> GitHub
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+                  <path d="M12 .5C5.65.5.5 5.72.5 12.17c0 5.16 3.29 9.54 7.86 11.09.58.11.79-.26.79-.58v-2.04c-3.2.71-3.88-1.39-3.88-1.39-.52-1.35-1.28-1.71-1.28-1.71-1.05-.74.08-.73.08-.73 1.16.08 1.77 1.21 1.77 1.21 1.03 1.82 2.72 1.29 3.39.99.1-.76.4-1.29.72-1.59-2.56-.3-5.25-1.31-5.25-5.83 0-1.29.45-2.35 1.2-3.18-.12-.3-.52-1.51.12-3.14 0 0 .98-.32 3.22 1.21.94-.27 1.95-.4 2.96-.4 1.01 0 2.02.13 2.96.4 2.24-1.53 3.22-1.21 3.22-1.21.64 1.63.24 2.84.12 3.14.75.83 1.2 1.89 1.2 3.18 0 4.53-2.7 5.52-5.28 5.82.42.37.79 1.11.79 2.24v3.32c0 .32.21.7.8.58 4.57-1.55 7.86-5.93 7.86-11.09C23.5 5.72 18.35.5 12 .5Z" />
+                </svg>
+                GitHub
               </a>
             </div>
           </div>

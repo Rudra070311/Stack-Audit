@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ChevronDown, Code, ArrowUpRight, Search } from "lucide-react";
 import { useState } from "react";
 
@@ -123,7 +124,7 @@ export default function FaqPage() {
 	const categories = Object.entries(faqData);
 
 	const filteredCategories = searchQuery
-		? categories.filter(([_, data]) =>
+		? categories.filter(([, data]) =>
 				data.faqs.some(
 					(faq) =>
 						faq.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -144,16 +145,12 @@ export default function FaqPage() {
 						<span className="font-bold text-base text-zinc-50 tracking-tight">StackAudit</span>
 					</div>
 					<div className="hidden md:flex items-center gap-10">
-						<a href="/" className="text-sm font-medium text-zinc-400 hover:text-cyan-300 transition-all duration-300 relative group">
+						<Link href="/" className="text-sm font-medium text-zinc-400 hover:text-cyan-300 transition-all duration-300 relative group">
 							Home
 							<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
-						</a>
+						</Link>
 						<a href="/features" className="text-sm font-medium text-zinc-400 hover:text-cyan-300 transition-all duration-300 relative group">
 							Features
-							<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
-						</a>
-						<a href="/pricing" className="text-sm font-medium text-zinc-400 hover:text-cyan-300 transition-all duration-300 relative group">
-							Pricing
 							<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
 						</a>
 					</div>
@@ -174,7 +171,7 @@ export default function FaqPage() {
 							<span className="gradient-text">questions</span>
 						</h1>
 						<p className="text-lg sm:text-xl text-zinc-400 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
-							Can't find the answer you're looking for? Contact our support team.
+							Can&apos;t find the answer you&apos;re looking for? Contact our support team.
 						</p>
 
 						{/* Search Box */}
@@ -242,7 +239,7 @@ export default function FaqPage() {
 						{filteredCategories.length === 0 && (
 							<div className="text-center py-12">
 								<p className="text-lg text-zinc-400 font-medium">
-									No results found for "{searchQuery}"
+									No results found for &quot;{searchQuery}&quot;
 								</p>
 								<button
 									onClick={() => setSearchQuery("")}
@@ -299,25 +296,24 @@ export default function FaqPage() {
 							<div>
 								<h4 className="text-sm font-bold text-zinc-50 mb-4 uppercase tracking-wider">Product</h4>
 								<ul className="space-y-3">
-									<li><a href="/" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Features</a></li>
-									<li><a href="/pricing" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Pricing</a></li>
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Documentation</a></li>
+									<li><Link href="/" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Home</Link></li>
+									<li><Link href="/features" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Features</Link></li>
 								</ul>
 							</div>
 							<div>
 								<h4 className="text-sm font-bold text-zinc-50 mb-4 uppercase tracking-wider">Company</h4>
 								<ul className="space-y-3">
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Blog</a></li>
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Changelog</a></li>
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Status</a></li>
+									<li><span className="text-sm text-zinc-400 font-medium">Blog unavailable in this submission</span></li>
+									<li><span className="text-sm text-zinc-400 font-medium">Changelog unavailable in this submission</span></li>
+									<li><span className="text-sm text-zinc-400 font-medium">Status unavailable in this submission</span></li>
 								</ul>
 							</div>
 							<div>
 								<h4 className="text-sm font-bold text-zinc-50 mb-4 uppercase tracking-wider">Legal</h4>
 								<ul className="space-y-3">
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Privacy</a></li>
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Terms</a></li>
-									<li><a href="#" className="text-sm text-zinc-400 hover:text-cyan-300 transition-all duration-300 font-medium">Contact</a></li>
+									<li><span className="text-sm text-zinc-400 font-medium">Privacy handled externally</span></li>
+									<li><span className="text-sm text-zinc-400 font-medium">Terms handled externally</span></li>
+									<li><span className="text-sm text-zinc-400 font-medium">Contact via homepage footer</span></li>
 								</ul>
 							</div>
 						</div>

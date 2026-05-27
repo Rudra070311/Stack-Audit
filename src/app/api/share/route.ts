@@ -5,7 +5,8 @@ import { storeAudit, supabase } from "../../../lib/supabase";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const shareId = generateId();
+    const shareId = body.audit?.auditId || generateId();
+    const origin = request.nextUrl.origin;
 
     // Store the audit in Supabase for the share page
     if (body.audit) {
@@ -34,7 +35,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       id: shareId,
-      shareUrl: `${process.env.NEXT_PUBLIC_APP_URL}/results/${shareId}`,
+      shareUrl: `${process.env.NEXT_PUBLIC_APP_URL || origin}/results/${shareId}`,
       data: body,
     });
   } catch (error) {
