@@ -66,3 +66,5 @@ I think this was my strongest area because a lot of the project involved debuggi
 
 Entrepreneurial thinking: 8.5/10
 I tried to think beyond coding by focusing on user value, lead generation, credibility, pricing logic, and what would actually make founders use or share the product.
+
+(Some AI used to see how to answer, just so i am not disqualified)
